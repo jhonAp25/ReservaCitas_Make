@@ -19,5 +19,30 @@ public class EstudianteService {
         return repository.findAll();
     }
 
+    public Estudiante findbyId(Long id){
+        return repository.findById(id).orElse(null);
+    }
+
+    public Estudiante save(Estudiante  estudiante){
+        return repository.save(estudiante);
+    }
+    public Estudiante update(Estudiante  estudiante){
+
+        Estudiante newEstudiante = findbyId(estudiante.getId());
+
+        if(estudiante.getNombre() != null)
+            newEstudiante.setNombre(estudiante.getNombre());
+
+        if(estudiante.getApellido() != null)
+            newEstudiante.setApellido(estudiante.getApellido());
+
+        if(estudiante.getFecnac() != null)
+            newEstudiante.setFecnac(estudiante.getFecnac());
+
+        if(estudiante.getDni() != null)
+            newEstudiante.setDni(estudiante.getDni());
+
+        return repository.save(newEstudiante);
+    }
 
 }
