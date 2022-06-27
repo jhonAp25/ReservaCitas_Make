@@ -3,10 +3,7 @@ package com.apaza.citas.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @NoArgsConstructor
@@ -20,12 +17,14 @@ public class Estudiante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
+    private String foto;
     private String nombre;
     private String apellido;
     private LocalDate fecnac;
     private String dni;
-    private String ocupacion;
+
+    @ManyToOne
+    private Carrera  carrera;
 
 
 
