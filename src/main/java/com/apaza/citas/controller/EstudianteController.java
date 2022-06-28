@@ -25,6 +25,12 @@ public class EstudianteController {
         return new ResponseEntity<>(service.listAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/filtroNombre")
+    @ApiOperation(value = "Obtiene todos los estudiantes por Nombre y Apellidos")
+    public ResponseEntity<?> listadoNombreAndApellido(String datos){
+        return new ResponseEntity<>(service.findbyNombreAndApellido(datos, datos), HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> busqueda(Long id){
         return new ResponseEntity<>(service.findbyId(id), HttpStatus.OK);

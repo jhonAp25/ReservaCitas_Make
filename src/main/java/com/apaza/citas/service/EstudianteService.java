@@ -19,6 +19,10 @@ public class EstudianteService {
         return repository.findAll();
     }
 
+    public List<Estudiante> findbyNombreAndApellido(String nombre, String apellido){
+        return repository.findAllByNombreContainsOrApellidoContains(nombre, apellido);
+    }
+
     public Estudiante findbyId(Long id){
         return repository.findById(id).orElse(null);
     }
