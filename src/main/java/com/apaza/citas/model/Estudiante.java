@@ -21,6 +21,7 @@ public class Estudiante {
     private String nombre;
     private String apellido;
     private LocalDate fecnac;
+    private String telefono;
     private String correo;
     private String dni;
 
