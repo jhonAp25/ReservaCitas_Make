@@ -4,11 +4,13 @@ package com.apaza.citas.controller;
 import com.apaza.citas.model.Especialidad;
 import com.apaza.citas.model.Especialista;
 import com.apaza.citas.service.EspecialidadService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Api
 @RestController
 @RequestMapping("/especialidad")
 public class EspecialidadController {

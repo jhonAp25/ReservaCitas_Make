@@ -40,8 +40,8 @@ public class EspecialistaService {
         if(especialista.getDni() != null)
             newEspecialista.setDni(especialista.getDni());
 
-        if(especialista.getFecNac() != null)
-            newEspecialista.setFecNac(especialista.getFecNac());
+        if(especialista.getFecnac() != null)
+            newEspecialista.setFecnac(especialista.getFecnac());
 
 
 

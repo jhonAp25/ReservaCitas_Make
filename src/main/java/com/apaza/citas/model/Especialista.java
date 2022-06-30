@@ -3,10 +3,8 @@ package com.apaza.citas.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -17,7 +15,12 @@ public class Especialista {
     private Long id;
     private String nombre;
     private String apellido;
-    private String fecNac;
+    private String telefono;
+    private String correo;
+    private LocalDate fecnac;
     private String dni;
+
+    @ManyToOne
+    private Especialidad especialidad;
 
 }

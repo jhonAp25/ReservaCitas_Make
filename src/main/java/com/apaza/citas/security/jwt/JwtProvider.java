@@ -1,53 +1,65 @@
 package com.apaza.citas.security.jwt;
 
-import com.apaza.citas.security.entity.UsuarioPrincipal;
+import com.apaza.citas.security.model.UserDetail;
+import com.apaza.citas.security.model.dto.JwtDto;
+import com.apaza.citas.security.util.Constants;
 import io.jsonwebtoken.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
 public class JwtProvider {
-    private final static Logger logger  = LoggerFactory.getLogger(JwtProvider.class);
 
-    @Value("${jwt.secret}")
-    private String secret;
-    @Value("${jwt.expiration}")
-    private int expiration;
+    public String generateToken(Authentication authentication){
+        UserDetail userDetail = (UserDetail) authentication.getPrincipal();
 
-    public  String generateToken (Authentication authentication){
-        UsuarioPrincipal usuarioPrincipal = (UsuarioPrincipal) authentication.getPrincipal();
-        return Jwts.builder().setSubject(usuarioPrincipal.getUsername())
+        return Jwts.builder()
+                .setSubject(userDetail.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + expiration * 1000))
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .setExpiration(new Date(new Date().getTime() + Constants.EXPIRATION))
+                .signWith(SignatureAlgorithm.HS256, Constants.SECRET.getBytes(StandardCharsets.UTF_8))
                 .compact();
-
-
     }
-    public String getNombreUsuarioFromToken(String token){
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
+
+    public String getUsernameFromtoken(String token){
+        return Jwts.parser()
+                .setSigningKey(Constants.SECRET.getBytes(StandardCharsets.UTF_8))
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
+
     public boolean validateToken(String token){
         try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            Jwts.parser()
+                    .setSigningKey(Constants.SECRET.getBytes(StandardCharsets.UTF_8))
+                    .parseClaimsJws(token);
             return true;
-        }catch (MalformedJwtException e){
-            logger.error("token mal formado "+ e);
-        }catch (UnsupportedJwtException e){
-            logger.error("token no soportado");
+        }catch (MalformedJwtException m){
+            System.out.println("Token mal formado");
+        }catch (UnsupportedJwtException u){
+            System.out.println("Token No Soportado");
         }catch (ExpiredJwtException e){
-            logger.error("token expirado");
-        }catch (IllegalArgumentException e){
-            logger.error("token vacío");
-        }catch (SignatureException e){
-            logger.error("fail en la firma");
+            System.out.println("Token Expirado");
+        }catch (IllegalArgumentException i){
+            System.out.println("Token Vacío");
+        }catch (SignatureException s){
+            System.out.println("Fallo en la Firma");
         }
         return false;
     }
 
+    public String refreshToken(JwtDto jwtDto){
+        String username = this.getUsernameFromtoken(jwtDto.getToken());
+
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime() + Constants.EXPIRATION * 2))
+                .signWith(SignatureAlgorithm.HS256, Constants.SECRET.getBytes(StandardCharsets.UTF_8))
+                .compact();
+    }
 }

@@ -1,95 +1,48 @@
 package com.apaza.citas.security.controller;
 
-import com.apaza.citas.security.dto.JwtDto;
-import com.apaza.citas.security.dto.LoginUsuario;
-import com.apaza.citas.security.dto.NuevoUsuario;
-import com.apaza.citas.security.entity.Rol;
-import com.apaza.citas.security.entity.Usuario;
-import com.apaza.citas.security.enums.RolNombre;
-import com.apaza.citas.security.jwt.JwtProvider;
-import com.apaza.citas.security.services.RolService;
-import com.apaza.citas.security.services.UsuarioService;
-
-
+import com.apaza.citas.security.model.dto.JwtDto;
+import com.apaza.citas.security.model.dto.LoginDto;
+import com.apaza.citas.security.model.dto.UserDto;
+import com.apaza.citas.security.service.UserService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.Set;
 
+@Api
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    AuthenticationManager authenticationManager;
-    @Autowired
-    UsuarioService usuarioService;
-    @Autowired
-    RolService rolService;
-    @Autowired
-    JwtProvider jwtProvider;
+    private UserService service;
 
+    @GetMapping("/list-users")
+    public ResponseEntity<?> listUsers(){
 
-
-    @GetMapping("/user")
-    public ResponseEntity<?> User (@RequestHeader("Bearer") String token){
-        return new ResponseEntity(usuarioService.getUsername(token), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(service.getAll());
     }
 
-
-    @PostMapping("/nuevo")
-    public ResponseEntity<?> nuevo(@RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult){
-        if(bindingResult.hasErrors())
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        if (usuarioService.existsByNombreUsuario(nuevoUsuario.getNombreUsuario()))
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        if(usuarioService.existsByEmail(nuevoUsuario.getEmail()))
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        Usuario usuario= new Usuario(nuevoUsuario.getNombre(),
-                                    nuevoUsuario.getNombreUsuario(),
-                                    nuevoUsuario.getEmail(),
-                                    passwordEncoder.encode(nuevoUsuario.getPassword()));
-
-        Set<Rol> roles = new HashSet<>();
-        roles.add(rolService.getByNombre(RolNombre.ROLE_USER).get());
-
-        if (nuevoUsuario.getRoles().contains("admin"))
-            roles.add(rolService.getByNombre(RolNombre.ROLE_ADMIN).get());
-
-        usuario.setRoles(roles);
-        usuarioService.save(usuario);
-
-
-        return new ResponseEntity(HttpStatus.CREATED);
+    @PostMapping("/sign-in")
+    public ResponseEntity<?> create(@RequestBody UserDto user){
+        if (service.existsByEmail(user.getEmail())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El Correo \""+user.getEmail()+"\" ya existe.");
+        }
+        if (service.existsByUsername(user.getUsername())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El Nombre de Usuario \""+user.getUsername()+"\" ya existe.");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.newUser(user));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<JwtDto> login (@RequestBody LoginUsuario loginUsuario , BindingResult bindingResult){
-        if (bindingResult.hasErrors())
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-
-        Authentication authentication =
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUsuario.getNombreUsuario(), loginUsuario.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtProvider.generateToken(authentication);
-        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
-        JwtDto jwtDto = new JwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities());
-        return new ResponseEntity(jwtDto, HttpStatus.OK);
-
+    @PostMapping("/log-in")
+    public ResponseEntity<JwtDto> login(@RequestBody LoginDto loginDto){
+        return ResponseEntity.status(HttpStatus.OK).body(service.Login(loginDto));
     }
 
-
-
+    @PostMapping("/refresh")
+    public ResponseEntity<JwtDto> refresh(@RequestBody JwtDto jwtDto){
+        return ResponseEntity.status(HttpStatus.OK).body(service.refresh(jwtDto));
+    }
 }

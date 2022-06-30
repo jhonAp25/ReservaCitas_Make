@@ -1,9 +1,8 @@
 package com.apaza.citas.security;
 
-
 import com.apaza.citas.security.jwt.JwtEntryPoint;
 import com.apaza.citas.security.jwt.JwtTokenFilter;
-import com.apaza.citas.security.services.UserDetailsServiceImpl;
+import com.apaza.citas.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,31 +17,30 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class MainSecurity extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    UserDetailsServiceImpl userDetalsService;
+    private UserService service;
+
     @Autowired
-    JwtEntryPoint jwtEntryPoint;
+    private JwtEntryPoint jwtEntryPoint;
 
     @Bean
-     public JwtTokenFilter jwtTokenFilter(){
-         return new JwtTokenFilter();
-     }
-     @Bean
-     public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-     }
+    public JwtTokenFilter jwtTokenFilter(){
+        return new JwtTokenFilter();
+    }
 
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetalsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(service).passwordEncoder(passwordEncoder());
     }
 
     @Bean
@@ -56,23 +54,23 @@ public class MainSecurity extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
-               .antMatchers("/estudiante/**").permitAll()
-             //   .antMatchers("/producto/**").authenticated()
-
-
+                .antMatchers(
+                        "/",
+                        "/auth/**",
+                        "/v2/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-resources/**",
+                        "/configuration/**"
+                ).permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtEntryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.csrf().disable();
-        http.headers().frameOptions().disable();
     }
 }

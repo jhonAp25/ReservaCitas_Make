@@ -1,22 +1,21 @@
 package com.apaza.citas.controller;
 
 
-import com.apaza.citas.model.Carrera;
-import com.apaza.citas.model.Especialidad;
-import com.apaza.citas.service.CarreraService;
+
+import com.apaza.citas.model.Cupos;
+import com.apaza.citas.service.CuposService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 @Api
 @RestController
-@RequestMapping("/carrera")
-public class CarreraController {
+@RequestMapping("/cupos")
+public class CuposController {
 
     @Autowired
-    private CarreraService service;
+    private CuposService service;
 
     @GetMapping
     public ResponseEntity<?> listado(){
@@ -29,14 +28,14 @@ public class CarreraController {
     }
 
     @PostMapping
-    public ResponseEntity<?> agregar(@RequestBody Carrera carrera){
-        return new ResponseEntity<>(service.save(carrera), HttpStatus.OK);
+    public ResponseEntity<?> agregar(@RequestBody Cupos cupos){
+        return new ResponseEntity<>(service.save(cupos), HttpStatus.OK);
     }
 
 
 
     @PutMapping
-    public ResponseEntity<?> actualizar(@RequestBody Carrera carrera){
-        return new ResponseEntity<>(service.update(carrera ), HttpStatus.OK);
+    public ResponseEntity<?> actualizar(@RequestBody Cupos cupos){
+        return new ResponseEntity<>(service.update(cupos ), HttpStatus.OK);
     }
 }
