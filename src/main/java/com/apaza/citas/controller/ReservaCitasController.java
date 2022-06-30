@@ -1,8 +1,10 @@
 package com.apaza.citas.controller;
 
 
+import com.apaza.citas.model.Asistencia;
 import com.apaza.citas.model.Cita;
 import com.apaza.citas.model.ReservaCita;
+import com.apaza.citas.service.AsistenciaService;
 import com.apaza.citas.service.ReservaCitaService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class ReservaCitasController {
     @Autowired
     private ReservaCitaService service;
 
+    @Autowired
+    private AsistenciaService asistenciaService;
+
     @GetMapping
     public ResponseEntity<?> listado(){
         return new ResponseEntity<>(service.listAll(), HttpStatus.OK);
@@ -31,6 +36,16 @@ public class ReservaCitasController {
 
     @PostMapping
     public ResponseEntity<?> agregar(@RequestBody ReservaCita cita){
+
+        Asistencia asistencia = new Asistencia();
+        asistencia.setEstudiante(cita.getEstudiante());
+        asistencia.setReservaCita(cita);
+        asistencia.setEstado("pendiente");
+
+        asistenciaService.save(asistencia);
+
+
+
         return new ResponseEntity<>(service.save(cita), HttpStatus.OK);
     }
 

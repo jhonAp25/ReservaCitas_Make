@@ -47,11 +47,11 @@ public class Data {
 
         if (userService.getAll().isEmpty()){
             Users user = new Users();
-            user.setNames("Alex Fernando");
-            user.setSurnames("Justiniano De la cruz");
-            user.setEmail("alex@gmail.com");
-            user.setUsername("ALX99");
-            user.setPassword("alex123");
+            user.setNames("Jhon");
+            user.setSurnames("Apaza Larico");
+            user.setEmail("apazalarico@gmail.com");
+            user.setUsername("jhon01");
+            user.setPassword("jhon01");
             user.setRoles(roles);
             userService.create(user);
 
