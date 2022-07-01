@@ -25,6 +25,12 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(service.getAll());
     }
 
+    @GetMapping("/find-user/{username}")
+    public ResponseEntity<?> findUser(@PathVariable String username){
+
+        return ResponseEntity.status(HttpStatus.OK).body(service.getByUsername(username));
+    }
+
     @PostMapping("/sign-in")
     public ResponseEntity<?> create(@RequestBody UserDto user){
         if (service.existsByEmail(user.getEmail())){

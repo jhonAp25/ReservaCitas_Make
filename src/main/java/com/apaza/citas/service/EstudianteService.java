@@ -3,6 +3,8 @@ package com.apaza.citas.service;
 
 import com.apaza.citas.model.Estudiante;
 import com.apaza.citas.repository.EstudianteRepository;
+import com.apaza.citas.security.model.dto.UserDto;
+import com.apaza.citas.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,9 @@ public class EstudianteService {
 
     @Autowired
     private EstudianteRepository repository;
+
+    @Autowired
+    private UserService userService;
 
     public List<Estudiante> listAll(){
         return repository.findAll();
@@ -28,6 +33,19 @@ public class EstudianteService {
     }
 
     public Estudiante save(Estudiante  estudiante){
+
+        UserDto userDto =  new UserDto();
+        userDto.setEmail(estudiante.getCorreo());
+        userDto.setNames(estudiante.getNombre() +" " + estudiante.getApellido());
+        userDto.setSurnames(estudiante.getNombre());
+
+        userDto.setUsername(estudiante.getNombre());
+        userDto.setPassword(estudiante.getApellido().charAt(0) + estudiante.getDni());
+        userDto.setRol("ESTUDIANTE");
+
+        userService.newUser(userDto);
+
+
         return repository.save(estudiante);
     }
     public Estudiante update(Estudiante  estudiante){
