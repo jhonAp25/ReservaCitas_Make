@@ -1,6 +1,7 @@
 package com.apaza.citas.service;
 
 
+import com.apaza.citas.model.Asistencia;
 import com.apaza.citas.model.Cita;
 import com.apaza.citas.model.Cupos;
 import com.apaza.citas.model.ReservaCita;
@@ -20,6 +21,9 @@ public class ReservaCitaService {
     @Autowired
     private CuposService cuposService;
 
+    @Autowired
+    private AsistenciaService asistenciaService;
+
     public List<ReservaCita> listAll(){
         return repository.findAll();
     }
@@ -31,11 +35,18 @@ public class ReservaCitaService {
     public ReservaCita save(ReservaCita  cita){
 
         Cupos cupos = cita.getCupos();
-
         cuposService.updateEstado(cupos);
 
+        ReservaCita respCita = repository.save(cita);
 
-        return repository.save(cita);
+        Asistencia asistencia = new Asistencia();
+        asistencia.setEstudiante(respCita.getEstudiante());
+        asistencia.setReservaCita(respCita);
+        asistencia.setEstado("pendiente");
+        asistenciaService.save(asistencia);
+
+
+        return respCita;
     }
     public ReservaCita update(ReservaCita  cita){
 

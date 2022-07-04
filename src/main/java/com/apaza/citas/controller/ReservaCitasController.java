@@ -21,8 +21,7 @@ public class ReservaCitasController {
     @Autowired
     private ReservaCitaService service;
 
-    @Autowired
-    private AsistenciaService asistenciaService;
+
 
     @GetMapping
     public ResponseEntity<?> listado(){
@@ -37,12 +36,12 @@ public class ReservaCitasController {
     @PostMapping
     public ResponseEntity<?> agregar(@RequestBody ReservaCita cita){
 
-        Asistencia asistencia = new Asistencia();
-        asistencia.setEstudiante(cita.getEstudiante());
-        asistencia.setReservaCita(cita);
-        asistencia.setEstado("pendiente");
-
-        asistenciaService.save(asistencia);
+//        Asistencia asistencia = new Asistencia();
+//        asistencia.setEstudiante(cita.getEstudiante());
+//        asistencia.setReservaCita(cita);
+//        asistencia.setEstado("pendiente");
+//
+//        asistenciaService.save(asistencia);
 
 
 
