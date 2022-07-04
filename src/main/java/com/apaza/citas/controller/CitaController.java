@@ -6,9 +6,12 @@ import com.apaza.citas.model.Especialidad;
 import com.apaza.citas.service.CitaService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @Api
 @RestController
@@ -27,6 +30,18 @@ public class CitaController {
     public ResponseEntity<?> busqueda(Long id){
         return new ResponseEntity<>(service.findbyId(id), HttpStatus.OK);
     }
+
+
+    @GetMapping("/{fecha}/{id}")
+    public ResponseEntity<?> filtroFechaEspecialidad(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate  fecha, @PathVariable Long id){
+
+        if (service.findFechaEspecialidad(fecha,id) == null){
+            return new ResponseEntity<>("No Hay Citas Disponibles", HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(service.findFechaEspecialidad(fecha,id), HttpStatus.OK);
+    }
+
 
     @PostMapping
     public ResponseEntity<?> agregar(@RequestBody Cita cita){

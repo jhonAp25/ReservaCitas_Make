@@ -7,6 +7,7 @@ import com.apaza.citas.repository.CitaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -21,6 +22,10 @@ public class CitaService {
 
     public Cita findbyId(Long id){
         return repository.findById(id).orElse(null);
+    }
+
+    public Cita findFechaEspecialidad(LocalDate fecha, Long id){
+        return repository.findCitaByFechaAndAndEspecialista_Id(fecha,id);
     }
 
     public Cita save(Cita  cita){
