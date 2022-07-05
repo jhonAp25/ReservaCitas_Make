@@ -23,7 +23,7 @@ public class CitaService {
         return repository.findById(id).orElse(null);
     }
 
-    public Cita findFechaEspecialidad(LocalDate fecha, Long id){
+    public List<Cita> findFechaEspecialidad(LocalDate fecha, Long id){
         return repository.findCitaByFechaAndAndEspecialista_Id(fecha,id);
     }
 
