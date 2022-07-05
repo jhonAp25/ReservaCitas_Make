@@ -33,15 +33,14 @@ public class ReservaCitasController {
         return new ResponseEntity<>(service.findbyId(id), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> busquedaCupos(Long id){
+        return new ResponseEntity<>(service.findCitaPorCupos(id), HttpStatus.OK);
+    }
+
+
     @PostMapping
     public ResponseEntity<?> agregar(@RequestBody ReservaCita cita){
-
-//        Asistencia asistencia = new Asistencia();
-//        asistencia.setEstudiante(cita.getEstudiante());
-//        asistencia.setReservaCita(cita);
-//        asistencia.setEstado("pendiente");
-//
-//        asistenciaService.save(asistencia);
 
 
 

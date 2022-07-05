@@ -32,6 +32,10 @@ public class ReservaCitaService {
         return repository.findById(id).orElse(null);
     }
 
+    public ReservaCita findCitaPorCupos(Long id){
+        return repository.findAllByCupos_Id(id);
+    }
+
     public ReservaCita save(ReservaCita  cita){
 
         Cupos cupos = cita.getCupos();
