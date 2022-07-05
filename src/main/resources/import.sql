@@ -4,12 +4,6 @@ insert into Carrera (descripcion) values ('Contabilidad');
 insert into Carrera (descripcion) values ('Administracion de Empresas');
 insert into Carrera (descripcion) values ('Ing. Industrial');
 
-insert into cupos (hora_inicio, hora_fin ,estado) values ( '02:00', '03:00', true );
-insert into cupos (hora_inicio, hora_fin ,estado) values ( '03:00', '04:00', true );
-insert into cupos (hora_inicio, hora_fin ,estado) values ( '04:00', '05:00', true );
-insert into cupos (hora_inicio, hora_fin ,estado) values ( '05:00', '06:00', true );
-
-
 
 
 

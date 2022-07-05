@@ -50,10 +50,6 @@ public class CuposService {
 
         newCupos.setEstado(false);
 
-
-
-
-
         return repository.save(newCupos);
     }
 }

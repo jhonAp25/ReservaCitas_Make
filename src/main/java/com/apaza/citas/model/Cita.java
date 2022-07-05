@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -18,14 +19,16 @@ public class Cita {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate fecha;
-    private int nrocupos;
+    private LocalTime horaInicio;
+    private LocalTime horaFin;
+    private boolean estado;
+
+    @PrePersist
+    void preInsert() {
+        estado = true;
+    }
 
     @ManyToOne
     private Especialista especialista;
-
-
-    @OneToMany
-    private  List<Cupos> cupos;
-
 
 }
