@@ -47,9 +47,7 @@ public class CitaService {
 
         Cita newCita = findbyId(cita.getId());
 
-
-        if(cita.isEstado())
-            newCita.setEstado(false);
+        newCita.setEstado(false);
 
 
 
