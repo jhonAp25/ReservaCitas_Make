@@ -34,7 +34,7 @@ public class ReservaCitasController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> busquedaCupos(Long id){
+    public ResponseEntity<?> busquedaCupos(@PathVariable Long id){
         return new ResponseEntity<>(service.findCitaPorCupos(id), HttpStatus.OK);
     }
 
