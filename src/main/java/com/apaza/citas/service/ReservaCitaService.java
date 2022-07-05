@@ -3,9 +3,7 @@ package com.apaza.citas.service;
 
 import com.apaza.citas.model.Asistencia;
 import com.apaza.citas.model.Cita;
-import com.apaza.citas.model.Cupos;
 import com.apaza.citas.model.ReservaCita;
-import com.apaza.citas.repository.CuposRepository;
 import com.apaza.citas.repository.ReservaCitaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +17,7 @@ public class ReservaCitaService {
     private ReservaCitaRepository repository;
 
     @Autowired
-    private CuposService cuposService;
+    private CitaService citaService;
 
     @Autowired
     private AsistenciaService asistenciaService;
@@ -32,16 +30,16 @@ public class ReservaCitaService {
         return repository.findById(id).orElse(null);
     }
 
-    public ReservaCita findCitaPorCupos(Long id){
-        return repository.findAllByCupos_Id(id);
+    public ReservaCita findReservaCita(Long id){
+        return repository.findAllByCita_Id(id);
     }
 
-    public ReservaCita save(ReservaCita  cita){
+    public ReservaCita save(ReservaCita  reservaCita){
 
-        Cupos cupos = cita.getCupos();
-        cuposService.updateEstado(cupos);
+        Cita cita = reservaCita.getCita();
+        citaService.updateEstado(cita);
 
-        ReservaCita respCita = repository.save(cita);
+        ReservaCita respCita = repository.save(reservaCita);
 
         Asistencia asistencia = new Asistencia();
         asistencia.setEstudiante(respCita.getEstudiante());

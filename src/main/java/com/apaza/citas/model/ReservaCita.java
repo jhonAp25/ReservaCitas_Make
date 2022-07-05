@@ -20,6 +20,5 @@ public class ReservaCita {
     @ManyToOne
     private Cita cita;
 
-    @ManyToOne
-    private Cupos cupos;
+
 }
