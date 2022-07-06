@@ -38,8 +38,6 @@ public class Data {
             roleService.create(rol3);
 
             roles.add(rol1);
-            roles.add(rol2);
-            roles.add(rol3);
 
             System.out.println("Roles Created.");
         }
