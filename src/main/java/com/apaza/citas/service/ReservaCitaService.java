@@ -3,6 +3,7 @@ package com.apaza.citas.service;
 
 import com.apaza.citas.model.Asistencia;
 import com.apaza.citas.model.Cita;
+import com.apaza.citas.model.Estudiante;
 import com.apaza.citas.model.ReservaCita;
 import com.apaza.citas.repository.ReservaCitaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,10 @@ public class ReservaCitaService {
 
     @Autowired
     private CitaService citaService;
+
+
+    @Autowired
+    private EstudianteService estudianteService;
 
     @Autowired
     private AsistenciaService asistenciaService;
@@ -46,6 +51,9 @@ public class ReservaCitaService {
         asistencia.setReservaCita(respCita);
         asistencia.setEstado("pendiente");
         asistenciaService.save(asistencia);
+
+        Estudiante estudiante = reservaCita.getEstudiante();
+        estudianteService.updateEstado(estudiante);
 
 
         return respCita;

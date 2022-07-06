@@ -2,6 +2,7 @@ package com.apaza.citas.service;
 
 
 import com.apaza.citas.model.Cita;
+import com.apaza.citas.model.Estudiante;
 import com.apaza.citas.repository.CitaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ public class CitaService {
     @Autowired
     private CitaRepository repository;
 
+
+
     public List<Cita> listAll(){
         return repository.findAll();
     }
@@ -27,7 +30,16 @@ public class CitaService {
         return repository.findCitaByFechaAndAndEspecialista_Id(fecha,id);
     }
 
+    public List<Cita> findFechaEspecialidadDisponible( LocalDate fecha ,Long id){
+        return repository.findCitaByFechaAndEspecialista_IdAndEstado(fecha,id, true);
+    }
+
+
+
     public Cita save(Cita  cita){
+
+
+
         return repository.save(cita);
     }
     public Cita update(Cita  cita){

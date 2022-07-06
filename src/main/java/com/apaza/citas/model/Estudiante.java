@@ -25,6 +25,14 @@ public class Estudiante {
     private String correo;
     private String dni;
 
+    private String estado;
+
+    @PrePersist
+    void preInsert() {
+        estado = "disponible";
+    }
+
+
     @ManyToOne
     private Carrera  carrera;
 

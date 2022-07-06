@@ -35,11 +35,17 @@ public class CitaController {
     @GetMapping("/{fecha}/{id}")
     public ResponseEntity<?> filtroFechaEspecialidad(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate  fecha, @PathVariable Long id){
 
-        if (service.findFechaEspecialidad(fecha,id) == null){
-            return new ResponseEntity<>("No Hay Citas Disponibles", HttpStatus.NO_CONTENT);
-        }
+    //    if (service.findFechaEspecialidad(fecha,id).isEmpty())
+    //      return new ResponseEntity<>("No Hay Citas Disponibles", HttpStatus.NO_CONTENT);
+    //    }
 
         return new ResponseEntity<>(service.findFechaEspecialidad(fecha,id), HttpStatus.OK);
+    }
+
+    @GetMapping("/cita-disponible/{fecha}/{id}")
+    public ResponseEntity<?> filtroFechaEspecialidadDisponibles(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate  fecha, @PathVariable Long id){
+
+        return new ResponseEntity<>(service.findFechaEspecialidadDisponible(fecha, id), HttpStatus.OK);
     }
 
 

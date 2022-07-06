@@ -9,4 +9,7 @@ import java.util.List;
 public interface CitaRepository extends JpaRepository<Cita, Long> {
 
     List<Cita> findCitaByFechaAndAndEspecialista_Id(LocalDate fecha, Long id);
+
+    List<Cita> findCitaByFechaAndEspecialista_IdAndEstado(LocalDate fecha, Long id, Boolean estado);
+
 }

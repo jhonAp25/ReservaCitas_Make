@@ -31,6 +31,11 @@ public class EstudianteController {
         return new ResponseEntity<>(service.findbyNombreAndApellido(datos, datos), HttpStatus.OK);
     }
 
+    @GetMapping("/estudiante-pendiente")
+    public ResponseEntity<?> listadoEstudiantePendiente(){
+        return new ResponseEntity<>(service.findEstudiantePendiente(), HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> busqueda(Long id){
         return new ResponseEntity<>(service.findbyId(id), HttpStatus.OK);

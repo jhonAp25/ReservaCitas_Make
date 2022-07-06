@@ -1,6 +1,7 @@
 package com.apaza.citas.service;
 
 
+import com.apaza.citas.model.Cita;
 import com.apaza.citas.model.Estudiante;
 import com.apaza.citas.repository.EstudianteRepository;
 import com.apaza.citas.security.model.dto.UserDto;
@@ -26,6 +27,11 @@ public class EstudianteService {
 
     public List<Estudiante> findbyNombreAndApellido(String nombre, String apellido){
         return repository.findAllByNombreContainsOrApellidoContains(nombre, apellido);
+    }
+
+
+    public List<Estudiante> findEstudiantePendiente(){
+        return repository.findAllByEstado("pendiente");
     }
 
     public Estudiante findbyId(Long id){
@@ -63,6 +69,17 @@ public class EstudianteService {
 
         if(estudiante.getDni() != null)
             newEstudiante.setDni(estudiante.getDni());
+
+        return repository.save(newEstudiante);
+    }
+
+    public Estudiante updateEstado(Estudiante  estudiante){
+
+        Estudiante newEstudiante = findbyId(estudiante.getId());
+
+        newEstudiante.setEstado("ocupado");
+
+
 
         return repository.save(newEstudiante);
     }
