@@ -31,7 +31,7 @@ public class CitaService {
     }
 
     public List<Cita> listaTop(Long idEspcd){
-        return repository.findAllByEstadoAndEspecialista_Especialidad_IdOrderByFecha(idEspcd, true);
+        return repository.findAllByEstadoAndEspecialista_Especialidad_IdOrderByFecha(true,idEspcd);
     }
 
     public List<Cita> findFechaEspecialidad(LocalDate fecha, Long id){
