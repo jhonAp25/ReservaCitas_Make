@@ -30,16 +30,16 @@ public class CitaService {
         return repository.findById(id).orElse(null);
     }
 
-    public List<Cita> listaTop(){
-        return repository.findAllByEstadoOrderByFecha(true);
+    public List<Cita> listaTop(Long idEspcd){
+        return repository.findAllByEstadoAndEspecialista_Especialidad_IdOrderByFecha(idEspcd, true);
     }
 
     public List<Cita> findFechaEspecialidad(LocalDate fecha, Long id){
-        return repository.findCitaByFechaAndAndEspecialista_Id(fecha,id);
+        return repository.findCitaByFechaAndEspecialista_Especialidad_Id(fecha,id);
     }
 
     public List<Cita> findFechaEspecialidadDisponible( LocalDate fecha ,Long id){
-        return repository.findCitaByFechaAndEspecialista_IdAndEstado(fecha,id, true);
+        return repository.findCitaByFechaAndEspecialista_Especialidad_IdAndEstado(fecha,id, true);
     }
 
 

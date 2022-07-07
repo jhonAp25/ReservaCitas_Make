@@ -42,10 +42,10 @@ public class CitaController {
         return new ResponseEntity<>(service.findFechaEspecialidad(fecha,id), HttpStatus.OK);
     }
 
-    @GetMapping("/top")
-    public ResponseEntity<?> topCita(){
+    @GetMapping("/top/{idEspcd}")
+    public ResponseEntity<?> topCita(Long idEspcd){
 
-        return new ResponseEntity<>(service.listaTop(), HttpStatus.OK);
+        return new ResponseEntity<>(service.listaTop(idEspcd), HttpStatus.OK);
     }
 
     @GetMapping("/cita-disponible/{fecha}/{id}")
