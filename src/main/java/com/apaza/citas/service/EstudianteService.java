@@ -30,9 +30,7 @@ public class EstudianteService {
     }
 
 
-    public List<Estudiante> findEstudiantePendiente(){
-        return repository.findAllByEstado("pendiente");
-    }
+
 
     public Estudiante findbyId(Long id){
         return repository.findById(id).orElse(null);
@@ -73,15 +71,6 @@ public class EstudianteService {
         return repository.save(newEstudiante);
     }
 
-    public Estudiante updateEstado(Estudiante  estudiante){
 
-        Estudiante newEstudiante = findbyId(estudiante.getId());
-
-        newEstudiante.setEstado("ocupado");
-
-
-
-        return repository.save(newEstudiante);
-    }
 
 }

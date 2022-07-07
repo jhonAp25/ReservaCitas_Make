@@ -22,9 +22,6 @@ public class ReservaCitaService {
 
 
     @Autowired
-    private EstudianteService estudianteService;
-
-    @Autowired
     private AsistenciaService asistenciaService;
 
     public List<ReservaCita> listAll(){
@@ -51,9 +48,6 @@ public class ReservaCitaService {
         asistencia.setReservaCita(respCita);
         asistencia.setEstado("pendiente");
         asistenciaService.save(asistencia);
-
-        Estudiante estudiante = reservaCita.getEstudiante();
-        estudianteService.updateEstado(estudiante);
 
 
         return respCita;
