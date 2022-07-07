@@ -1,10 +1,8 @@
 package com.apaza.citas.service;
 
 
-import com.apaza.citas.model.Asistencia;
-import com.apaza.citas.model.Cita;
-import com.apaza.citas.model.Estudiante;
-import com.apaza.citas.model.ReservaCita;
+import com.apaza.citas.model.*;
+import com.apaza.citas.repository.ColaRepository;
 import com.apaza.citas.repository.ReservaCitaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +17,9 @@ public class ReservaCitaService {
 
     @Autowired
     private CitaService citaService;
+
+    @Autowired
+    private ColaService colaService;
 
 
     @Autowired
@@ -48,6 +49,11 @@ public class ReservaCitaService {
         asistencia.setReservaCita(respCita);
         asistencia.setEstado("pendiente");
         asistenciaService.save(asistencia);
+
+
+        Cola colaEst = colaService.findByIdEstudiante(reservaCita.getEstudiante().getId());
+        colaService.updateEstado(colaEst.getId(), "FINALIZADO");
+
 
 
         return respCita;

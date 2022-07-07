@@ -19,9 +19,14 @@ public class ColaService {
         return repository.findAll();
     }
 
+    public Cola findByIdEstudiante(Long id){
+        return repository.findAllByEstudiante_Id(id);
+    }
+
     public Cola findById(Long id){
         return repository.findById(id).orElse(null);
     }
+
 
     public List<Cola> findColaEspera(){
         return repository.findAllByEstado("ESPERA");
@@ -32,9 +37,9 @@ public class ColaService {
         return repository.save(cola);
     }
 
-    public Cola updateEstado(Long idCita , String estado){
+    public Cola updateEstado(Long idCola , String estado){
 
-        Cola newCola = findById(idCita);
+        Cola newCola = findById(idCola);
 
         newCola.setEstado(estado);
         return repository.save(newCola);

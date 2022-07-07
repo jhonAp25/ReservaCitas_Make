@@ -2,8 +2,10 @@ package com.apaza.citas.service;
 
 
 import com.apaza.citas.model.Cita;
+import com.apaza.citas.model.Cola;
 import com.apaza.citas.model.Estudiante;
 import com.apaza.citas.repository.CitaRepository;
+import com.apaza.citas.repository.ColaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ public class CitaService {
 
     @Autowired
     private CitaRepository repository;
+
+
 
 
 
@@ -37,7 +41,6 @@ public class CitaService {
 
 
     public Cita save(Cita  cita){
-
 
 
         return repository.save(cita);

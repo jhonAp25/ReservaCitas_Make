@@ -8,4 +8,5 @@ import java.util.List;
 public interface ColaRepository extends JpaRepository<Cola, Long> {
 
     List<Cola> findAllByEstado (String estado);
+    Cola findAllByEstudiante_Id(Long id);
 }
