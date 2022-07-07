@@ -43,7 +43,7 @@ public class CitaController {
     }
 
     @GetMapping("/top/{idEspcd}")
-    public ResponseEntity<?> topCita(Long idEspcd){
+    public ResponseEntity<?> topCita(@PathVariable Long idEspcd){
 
         return new ResponseEntity<>(service.listaTop(idEspcd), HttpStatus.OK);
     }
