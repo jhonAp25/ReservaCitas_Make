@@ -69,15 +69,6 @@ public class EstudianteService {
         return repository.save(newEstudiante);
     }
 
-    public Estudiante updateEstado(Estudiante  estudiante){
 
-        Estudiante newEstudiante = findbyId(estudiante.getId());
-
-        newEstudiante.setEstado("ocupado");
-
-
-
-        return repository.save(newEstudiante);
-    }
 
 }
