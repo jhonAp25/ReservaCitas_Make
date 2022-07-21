@@ -42,6 +42,12 @@ public class CitaController {
         return new ResponseEntity<>(service.findFechaEspecialidad(fecha,id), HttpStatus.OK);
     }
 
+    @GetMapping("/top/{idEspcd}")
+    public ResponseEntity<?> topCita(@PathVariable Long idEspcd){
+
+        return new ResponseEntity<>(service.listaTop(idEspcd), HttpStatus.OK);
+    }
+
     @GetMapping("/cita-disponible/{fecha}/{id}")
     public ResponseEntity<?> filtroFechaEspecialidadDisponibles(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate  fecha, @PathVariable Long id){
 

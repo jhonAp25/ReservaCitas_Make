@@ -33,7 +33,7 @@ public class EstudianteController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> busqueda(@PathVariable Long id){
+    public ResponseEntity<?> busqueda(Long id){
         return new ResponseEntity<>(service.findbyId(id), HttpStatus.OK);
     }
 

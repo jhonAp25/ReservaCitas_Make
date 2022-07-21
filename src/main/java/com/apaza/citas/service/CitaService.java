@@ -2,8 +2,10 @@ package com.apaza.citas.service;
 
 
 import com.apaza.citas.model.Cita;
+import com.apaza.citas.model.Cola;
 import com.apaza.citas.model.Estudiante;
 import com.apaza.citas.repository.CitaRepository;
+import com.apaza.citas.repository.ColaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ public class CitaService {
 
 
 
+
+
     public List<Cita> listAll(){
         return repository.findAll();
     }
@@ -26,18 +30,21 @@ public class CitaService {
         return repository.findById(id).orElse(null);
     }
 
+    public List<Cita> listaTop(Long idEspcd){
+        return repository.findAllByEstadoAndEspecialista_Especialidad_IdOrderByFecha(true,idEspcd);
+    }
+
     public List<Cita> findFechaEspecialidad(LocalDate fecha, Long id){
-        return repository.findCitaByFechaAndAndEspecialista_Id(fecha,id);
+        return repository.findCitaByFechaAndEspecialista_Especialidad_Id(fecha,id);
     }
 
     public List<Cita> findFechaEspecialidadDisponible( LocalDate fecha ,Long id){
-        return repository.findCitaByFechaAndEspecialista_IdAndEstado(fecha,id, true);
+        return repository.findCitaByFechaAndEspecialista_Especialidad_IdAndEstado(fecha,id, true);
     }
 
 
 
     public Cita save(Cita  cita){
-
 
 
         return repository.save(cita);
