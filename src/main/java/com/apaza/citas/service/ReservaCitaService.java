@@ -52,9 +52,6 @@ public class ReservaCitaService {
         asistencia.setEstado("pendiente");
         asistenciaService.save(asistencia);
 
-        Estudiante estudiante = reservaCita.getEstudiante();
-        estudianteService.updateEstado(estudiante);
-
 
         return respCita;
     }

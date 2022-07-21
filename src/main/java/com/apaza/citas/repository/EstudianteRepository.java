@@ -11,5 +11,5 @@ import java.util.List;
 public interface EstudianteRepository extends JpaRepository<Estudiante, Long> {
 
     List<Estudiante> findAllByNombreContainsOrApellidoContains (String nombr, String apel);
-    List<Estudiante> findAllByEstado (String estado);
+
 }
