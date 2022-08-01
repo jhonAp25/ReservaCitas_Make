@@ -15,9 +15,6 @@ import java.util.Date;
 @Component
 public class JwtProvider {
 
-    @Autowired
-    private UserService userService;
-
 
     public String generateToken(Authentication authentication){
         UserDetail userDetail = (UserDetail) authentication.getPrincipal();
@@ -37,6 +34,13 @@ public class JwtProvider {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    public String getRoleFromtoken(String token){
+        return Jwts.parser()
+                .setSigningKey(Constants.SECRET.getBytes(StandardCharsets.UTF_8))
+                .parseClaimsJws(token)
+                .getBody().get("rol").toString();
     }
 
     public boolean validateToken(String token){
@@ -61,11 +65,13 @@ public class JwtProvider {
 
     public String refreshToken(JwtDto jwtDto){
         String username = this.getUsernameFromtoken(jwtDto.getToken());
+        String rol = this.getRoleFromtoken(jwtDto.getToken());
 
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + Constants.EXPIRATION * 2))
+                .claim("rol" , rol)
                 .signWith(SignatureAlgorithm.HS256, Constants.SECRET.getBytes(StandardCharsets.UTF_8))
                 .compact();
     }
