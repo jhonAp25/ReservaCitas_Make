@@ -38,6 +38,10 @@ public class CitaService {
         return repository.findCitaByFechaAndEspecialista_Especialidad_Id(fecha,id);
     }
 
+    public List<Cita> findFechaEspecialista(LocalDate fecha, Long id){
+        return repository.findCitaByFechaAndEspecialista_Id(fecha,id);
+    }
+
     public List<Cita> findFechaEspecialidadDisponible( LocalDate fecha ,Long id){
         return repository.findCitaByFechaAndEspecialista_Especialidad_IdAndEstado(fecha,id, true);
     }

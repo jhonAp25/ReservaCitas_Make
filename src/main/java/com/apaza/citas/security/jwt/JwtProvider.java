@@ -2,8 +2,10 @@ package com.apaza.citas.security.jwt;
 
 import com.apaza.citas.security.model.UserDetail;
 import com.apaza.citas.security.model.dto.JwtDto;
+import com.apaza.citas.security.service.UserService;
 import com.apaza.citas.security.util.Constants;
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,10 @@ import java.util.Date;
 @Component
 public class JwtProvider {
 
+    @Autowired
+    private UserService userService;
+
+
     public String generateToken(Authentication authentication){
         UserDetail userDetail = (UserDetail) authentication.getPrincipal();
 
@@ -20,6 +26,7 @@ public class JwtProvider {
                 .setSubject(userDetail.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + Constants.EXPIRATION))
+                .claim("rol" , userDetail.getAuthorities().toArray())
                 .signWith(SignatureAlgorithm.HS256, Constants.SECRET.getBytes(StandardCharsets.UTF_8))
                 .compact();
     }

@@ -59,6 +59,8 @@ public class UserService implements UserDetailsService {
         return repository.findByUsername(Username);
     }
 
+
+
     public boolean existsByUsername(String username){
         return repository.existsByUsername(username);
     }
