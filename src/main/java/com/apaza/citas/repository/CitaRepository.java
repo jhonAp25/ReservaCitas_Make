@@ -15,4 +15,5 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
     List<Cita> findCitaByFechaAndEspecialista_Id(LocalDate fecha, Long id);
 
 
+
 }
