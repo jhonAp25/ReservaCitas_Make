@@ -12,4 +12,6 @@ public interface EstudianteRepository extends JpaRepository<Estudiante, Long> {
 
     List<Estudiante> findAllByNombreContainsOrApellidoContains (String nombr, String apel);
 
+    Estudiante findAllByDni (String dni);
+
 }

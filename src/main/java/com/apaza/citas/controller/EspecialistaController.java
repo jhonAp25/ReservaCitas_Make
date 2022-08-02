@@ -25,8 +25,13 @@ public class EspecialistaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> busqueda(Long id){
+    public ResponseEntity<?> busqueda(@PathVariable Long id){
         return new ResponseEntity<>(service.findbyId(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/{dni}")
+    public ResponseEntity<?> busquedaDni(@PathVariable String dni){
+        return new ResponseEntity<>(service.findyDniEspecialista(dni), HttpStatus.OK);
     }
 
     @PostMapping

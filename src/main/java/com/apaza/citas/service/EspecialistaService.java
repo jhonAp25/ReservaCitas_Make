@@ -29,12 +29,16 @@ public class EspecialistaService {
         return repository.findById(id).orElse(null);
     }
 
+    public Especialista findyDniEspecialista(String dni){
+        return repository.findAllByDni(dni);
+    }
+
     public Especialista save(Especialista  especialista){
 
         UserDto userDto =  new UserDto();
         userDto.setEmail(especialista.getCorreo());
         userDto.setNames(especialista.getNombre()+" " + especialista.getApellido());
-        userDto.setSurnames(especialista.getNombre());
+        userDto.setSurnames(especialista.getDni());
 
         userDto.setUsername(especialista.getNombre());
         userDto.setPassword(especialista.getApellido().charAt(0) + especialista.getDni());
