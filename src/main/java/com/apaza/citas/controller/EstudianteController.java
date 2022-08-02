@@ -37,7 +37,7 @@ public class EstudianteController {
         return new ResponseEntity<>(service.findbyId(id), HttpStatus.OK);
     }
 
-    @GetMapping("/{dni}")
+    @GetMapping("/filtro/{dni}")
     public ResponseEntity<?> busquedaDni(@PathVariable  String dni){
         return new ResponseEntity<>(service.findyDniEstudiante(dni), HttpStatus.OK);
     }

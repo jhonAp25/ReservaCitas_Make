@@ -29,7 +29,7 @@ public class EspecialistaController {
         return new ResponseEntity<>(service.findbyId(id), HttpStatus.OK);
     }
 
-    @GetMapping("/{dni}")
+    @GetMapping("/filtro/{dni}")
     public ResponseEntity<?> busquedaDni(@PathVariable String dni){
         return new ResponseEntity<>(service.findyDniEspecialista(dni), HttpStatus.OK);
     }
