@@ -67,8 +67,14 @@ public class EstudianteService {
         if(estudiante.getFecnac() != null)
             newEstudiante.setFecnac(estudiante.getFecnac());
 
-        if(estudiante.getDni() != null)
-            newEstudiante.setDni(estudiante.getDni());
+        if(estudiante.getCorreo() != null)
+            newEstudiante.setCorreo(estudiante.getCorreo());
+
+        if(estudiante.getTelefono() != null)
+            newEstudiante.setTelefono(estudiante.getTelefono());
+
+        if(estudiante.getFoto() != null)
+            newEstudiante.setFoto(estudiante.getFoto());
 
         return repository.save(newEstudiante);
     }

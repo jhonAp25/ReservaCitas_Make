@@ -66,6 +66,12 @@ public class EspecialistaService {
         if(especialista.getFecnac() != null)
             newEspecialista.setFecnac(especialista.getFecnac());
 
+        if(especialista.getCorreo() != null)
+            newEspecialista.setCorreo(especialista.getCorreo());
+
+        if(especialista.getTelefono() != null)
+            newEspecialista.setTelefono(especialista.getTelefono());
+
 
 
         return repository.save(newEspecialista);
