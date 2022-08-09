@@ -60,7 +60,6 @@ public class CitaController {
         return new ResponseEntity<>(service.findFechaEspecialista( id, fecha), HttpStatus.OK);
     }
 
-
     @PostMapping
     public ResponseEntity<?> agregar(@RequestBody Cita cita){
         return new ResponseEntity<>(service.save(cita), HttpStatus.OK);
