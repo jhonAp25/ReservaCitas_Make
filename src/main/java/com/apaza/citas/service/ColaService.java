@@ -37,9 +37,9 @@ public class ColaService {
         return repository.save(cola);
     }
 
-    public Cola updateEstado(Long idCola , String estado){
+    public Cola updateEstado(Long idEstudiante , String estado){
 
-        Cola newCola = findById(idCola);
+        Cola newCola = findByIdEstudiante(idEstudiante);
 
         newCola.setEstado(estado);
         return repository.save(newCola);

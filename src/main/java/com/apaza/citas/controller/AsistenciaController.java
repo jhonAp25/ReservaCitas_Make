@@ -34,10 +34,20 @@ public class AsistenciaController {
         return new ResponseEntity<>(service.save(asistencia), HttpStatus.OK);
     }
 
+    @GetMapping("/fitro-estudiante/{id}")
+    public ResponseEntity<?> busquedaReservaEstudiante(@PathVariable Long id){
+        return new ResponseEntity<>(service.listAsistenciaEstudiante(id), HttpStatus.OK);
+    }
 
 
     @PutMapping
     public ResponseEntity<?> actualizar(@RequestBody Asistencia asistencia){
-        return new ResponseEntity<>(service.updateEstado(asistencia ), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateAsitencia(asistencia ), HttpStatus.OK);
+    }
+
+    @PutMapping("/update-estado/{estado}/{idCita}")
+    public ResponseEntity<?> actualizarEstado(@PathVariable String estado , @PathVariable Long idCita){
+        return new ResponseEntity<>(service.updateEstad(idCita, estado ), HttpStatus.OK);
     }
 }
+

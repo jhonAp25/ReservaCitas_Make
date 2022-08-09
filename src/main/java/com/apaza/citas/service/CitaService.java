@@ -66,13 +66,10 @@ public class CitaService {
         return repository.save(newCita);
     }
 
-    public Cita updateEstado(Cita  cita){
+    public Cita updateEstado(Cita  cita , boolean estado){
 
         Cita newCita = findbyId(cita.getId());
-
-        newCita.setEstado(false);
-
-
+        newCita.setEstado(estado);
 
         return repository.save(newCita);
     }

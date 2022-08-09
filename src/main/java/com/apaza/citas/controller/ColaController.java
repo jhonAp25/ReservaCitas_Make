@@ -49,8 +49,8 @@ public class ColaController {
 
 
     @PutMapping
-    public ResponseEntity<?> actualizarEstado(@PathVariable Long idCita ,@PathVariable String estado ){
-        return new ResponseEntity<>(service.updateEstado(idCita, estado ), HttpStatus.OK);
+    public ResponseEntity<?> actualizarEstado(@PathVariable Long idEstudiante ,@PathVariable String estado ){
+        return new ResponseEntity<>(service.updateEstado(idEstudiante, estado ), HttpStatus.OK);
     }
 
 

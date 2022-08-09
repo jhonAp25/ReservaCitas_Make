@@ -20,9 +20,11 @@ public class ReservaCitaService {
     @Autowired
     private CitaService citaService;
 
-
     @Autowired
-    private EstudianteService estudianteService;
+    private ColaService colaService;
+
+
+
 
     @Autowired
     private AsistenciaService asistenciaService;
@@ -42,14 +44,16 @@ public class ReservaCitaService {
     public ReservaCita save(ReservaCita  reservaCita){
 
         Cita cita = reservaCita.getCita();
-        citaService.updateEstado(cita);
+        citaService.updateEstado(cita , false);
 
         ReservaCita respCita = repository.save(reservaCita);
 
+        colaService.updateEstado(reservaCita.getEstudiante().getId() , "FINALIZADO");
+
         Asistencia asistencia = new Asistencia();
         asistencia.setEstudiante(respCita.getEstudiante());
-        asistencia.setReservaCita(respCita);
-        asistencia.setEstado("pendiente");
+        asistencia.setCita(cita);
+        asistencia.setEstado("PENDIENTE");
         asistenciaService.save(asistencia);
 
 
@@ -61,8 +65,25 @@ public class ReservaCitaService {
 
         //FALTA mas campos
 
-
-
         return repository.save(newCita);
     }
+
+    public List<ReservaCita> listReservaEstudiante(Long id){
+        return repository.findAllByEstudiante_Id(id);
+    }
+
+    public String  cancelarReserva(Long  idCit){
+
+        ReservaCita newReservaCita =  findReservaCita(idCit);
+        repository.delete(newReservaCita);
+
+        asistenciaService.updateEstad(idCit , "CANCELADO");
+        citaService.updateEstado(newReservaCita.getCita() , true);
+
+
+
+        return "Se cancelo la reserva existosamente!";
+    }
+
+
 }

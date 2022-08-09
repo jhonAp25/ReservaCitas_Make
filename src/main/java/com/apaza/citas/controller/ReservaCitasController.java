@@ -37,13 +37,14 @@ public class ReservaCitasController {
     public ResponseEntity<?> busquedaCita(@PathVariable Long id){
             return new ResponseEntity<>(service.findReservaCita(id), HttpStatus.OK);
     }
+    @GetMapping("/fitro-estudiante/{id}")
+    public ResponseEntity<?> busquedaReservaEstudiante(@PathVariable Long id){
+        return new ResponseEntity<>(service.listReservaEstudiante(id), HttpStatus.OK);
+    }
 
 
     @PostMapping
     public ResponseEntity<?> agregar(@RequestBody ReservaCita cita){
-
-
-
         return new ResponseEntity<>(service.save(cita), HttpStatus.OK);
     }
 
@@ -52,5 +53,10 @@ public class ReservaCitasController {
     @PutMapping
     public ResponseEntity<?> actualizar(@RequestBody ReservaCita cita){
         return new ResponseEntity<>(service.update(cita ), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/cancelar/{idCita}")
+    public ResponseEntity<?> cancelarReserva(@PathVariable Long idCita){
+        return new ResponseEntity<>(service.cancelarReserva(idCita), HttpStatus.OK);
     }
 }

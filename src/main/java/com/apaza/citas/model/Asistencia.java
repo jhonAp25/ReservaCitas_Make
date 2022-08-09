@@ -19,11 +19,11 @@ public class Asistencia {
     private Estudiante estudiante;
 
     @ManyToOne
-    private ReservaCita reservaCita;
+    private Cita cita;
 
     @PrePersist
     void preInsert() {
-        estado = "pendiente";
+        estado = "PENDIENTE";
     }
 
 }
