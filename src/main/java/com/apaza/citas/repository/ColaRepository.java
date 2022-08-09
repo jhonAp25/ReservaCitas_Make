@@ -9,4 +9,5 @@ public interface ColaRepository extends JpaRepository<Cola, Long> {
 
     List<Cola> findAllByEstado (String estado);
     Cola findAllByEstudiante_Id(Long id);
+    Boolean existsAllByEstudiante_Id(Long id);
 }
