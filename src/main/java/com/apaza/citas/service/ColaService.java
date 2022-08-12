@@ -33,8 +33,11 @@ public class ColaService {
     }
 
 
-    public Cola save(Cola cola){
-        return repository.save(cola);
+    public Boolean save(Cola cola){
+        if(ColaExistenteEstudiante(cola.getEstudiante().getId()))
+            return false;
+        repository.save(cola);
+        return true;
     }
     public Boolean ColaExistenteEstudiante(Long id){
         return repository.existsAllByEstudiante_Id(id);

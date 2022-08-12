@@ -43,6 +43,8 @@ public class ColaController {
 
     @PostMapping
     public ResponseEntity<?> agregar(@RequestBody Cola cola){
+        if (!service.save(cola))
+            return new ResponseEntity<>(service.save(cola), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(service.save(cola), HttpStatus.OK);
     }
 
