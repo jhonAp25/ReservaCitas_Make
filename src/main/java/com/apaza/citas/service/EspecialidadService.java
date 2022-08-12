@@ -23,7 +23,8 @@ public class EspecialidadService {
     }
 
     public Especialidad findbyId(Long id){
-        return repository.findById(id).orElse(null);
+
+       return repository.findById(id).orElse(null);
     }
 
     public Especialidad save(Especialidad  especialidad){

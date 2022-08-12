@@ -13,6 +13,7 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
     List<Cita> findAllByEstadoAndEspecialista_Especialidad_IdOrderByFecha( Boolean estado,Long id);
     List<Cita> findCitaByFechaAndEspecialista_Especialidad_IdAndEstado(LocalDate fecha, Long id, Boolean estado);
     List<Cita> findCitaByEspecialista_IdAndFechaAfter( Long id,LocalDate fecha);
+    Long countAllByFecha(LocalDate date);
 
 
 }

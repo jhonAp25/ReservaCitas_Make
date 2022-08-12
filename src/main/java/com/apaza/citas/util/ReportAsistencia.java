@@ -2,6 +2,7 @@ package com.apaza.citas.util;
 
 
 import com.apaza.citas.model.Asistencia;
+import com.apaza.citas.model.Especialidad;
 import com.lowagie.text.Font;
 import com.lowagie.text.Image;
 import com.lowagie.text.*;
@@ -18,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -25,136 +27,255 @@ public class ReportAsistencia {
 
     private static final Logger logger = LoggerFactory.getLogger(ReportAsistencia.class);
 
-    private static final Color DARK_COLOR = new Color(0, 36, 51);
+    private static final Color COLOR_TEXT = new Color(39, 43, 48);
+    private static final Color COLOR_TEXT_HINT = new Color(130, 132, 135);
+    private static final Color COLOR_BG_HINT = new Color(198, 198, 198);
+
+    private static final Color COLOR_BG_RED = new Color(255, 62, 96);
+    private static final Color COLOR_BG_RED_DARK = new Color(155, 46, 65);
+
+    private static final Color COLOR_BORDER_BLUE_DARK = new Color(54, 91, 115);
+
     private static final String FONT_FAMILY = FontFactory.HELVETICA;
 
-    DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-    String date_now = formatter.format(new Date());
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+    String currentDate = dateFormat.format(new Date());
+    Path pathStatic = Paths.get("src/main/resources/static");
 
-    public ByteArrayOutputStream getListAsistencia(List<Asistencia> asisteniciaList) {
+    public ByteArrayOutputStream generateList(List<Asistencia> asisteniciaList, LocalDate date, Especialidad specialty, String status) {
 
-        // ORIENTATION HORIZONTAL: PageSize.A4.rotate()
-        Document document = new Document(PageSize.A4, 40, 40, 40, 40);
+        Document document = new Document(PageSize.A4.rotate(), 40, 40, 40, 40);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
+        boolean dateInd = date != null;
+        boolean specialtyInd = specialty.getDescripcion() != null;
+        boolean statusInd = status != null;
+
         try {
-            PdfPTable table = new PdfPTable(4);
-            table.setSpacingBefore(20);
-            table.setWidthPercentage(100);
-            table.setWidths(new int[]{1, 3, 3, 3});
+            // CABECERA
 
-            Font headFont = FontFactory.getFont(FONT_FAMILY);
-            headFont.setColor(new Color(255, 255, 255));
-            PdfPCell hcell;
+            PdfPTable tblHeader = new PdfPTable(3);
+            tblHeader.setSpacingAfter(30);
+            tblHeader.setWidthPercentage(100);
+            tblHeader.setWidths(new int[]{25, 50, 25});
 
-            hcell = new PdfPCell(new Phrase("N°", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            hcell.setBackgroundColor(DARK_COLOR);
-            table.addCell(hcell);
+            Font titleFont = FontFactory.getFont(FONT_FAMILY, 22, Font.BOLD, COLOR_TEXT);
+            Font dateFont = FontFactory.getFont(FONT_FAMILY, 11, Font.NORMAL, COLOR_TEXT);
 
-            hcell = new PdfPCell(new Phrase("Nombre y Apellido", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            hcell.setVerticalAlignment(Element.ALIGN_CENTER);
-            hcell.setBackgroundColor(DARK_COLOR);
-            table.addCell(hcell);
+            PdfPCell headerCell;
 
-            hcell = new PdfPCell(new Phrase("Ciudad", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            hcell.setBackgroundColor(DARK_COLOR);
-            table.addCell(hcell);
+            Path pathLogoMake = pathStatic.resolve("logoMake.png").toAbsolutePath();
+            Image logoMake = Image.getInstance(String.valueOf(pathLogoMake));
+            logoMake.scaleToFit(100, 50);
 
-            hcell = new PdfPCell(new Phrase("Género", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            hcell.setBackgroundColor(DARK_COLOR);
-            table.addCell(hcell);
+            headerCell = new PdfPCell(logoMake);
+            headerCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            headerCell.setBorderColor(Color.WHITE);
+            headerCell.setVerticalAlignment(Element.ALIGN_CENTER);
+            tblHeader.addCell(headerCell);
 
-            Font cellFont = new Font();
-            cellFont.setColor(DARK_COLOR);
+            headerCell = new PdfPCell(new Phrase("ASISTENCIA DE CITAS", titleFont));
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setBorderColor(Color.WHITE);
+            headerCell.setVerticalAlignment(Element.ALIGN_CENTER);
+            headerCell.setPaddingTop(6);
+            tblHeader.addCell(headerCell);
+
+            headerCell = new PdfPCell(new Phrase("Reporte Fecha: ".concat(currentDate), dateFont));
+            headerCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            headerCell.setBorderColor(Color.WHITE);
+            headerCell.setVerticalAlignment(Element.ALIGN_CENTER);
+            headerCell.setPaddingTop(10);
+            tblHeader.addCell(headerCell);
+
+            // FILTROS
+
+            Paragraph titleFilter = new Paragraph("Filtros Aplicados:", FontFactory.getFont(FONT_FAMILY, 12, COLOR_TEXT));
+
+            PdfPTable tblFilter = new PdfPTable(3);
+            tblFilter.setSpacingAfter(20);
+            tblFilter.setWidthPercentage(60);
+            tblFilter.setWidths(new int[]{15, 30, 15});
+            tblFilter.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblFilter.setSpacingBefore(10);
+
+            PdfPCell filterCell;
+
+            if (dateInd) {
+                filterCell = new PdfPCell(new Phrase("Fecha: ".concat(date.toString()), FontFactory.getFont(FONT_FAMILY, 11, Font.NORMAL, COLOR_TEXT)));
+            } else {
+                filterCell = new PdfPCell(new Phrase("Fecha: ", FontFactory.getFont(FONT_FAMILY, 11, Font.NORMAL, COLOR_TEXT_HINT)));
+                filterCell.setBackgroundColor(COLOR_BG_HINT);
+            }
+            filterCell.setBorderColor(COLOR_BORDER_BLUE_DARK);
+            filterCell.setPadding(5);
+            tblFilter.addCell(filterCell);
+
+            if (specialtyInd) {
+                filterCell = new PdfPCell(new Phrase("Especialidad: ".concat(specialty.getDescripcion()), FontFactory.getFont(FONT_FAMILY, 11, Font.NORMAL, COLOR_TEXT)));
+            } else {
+                filterCell = new PdfPCell(new Phrase("Especialidad: ", FontFactory.getFont(FONT_FAMILY, 11, Font.NORMAL, COLOR_TEXT_HINT)));
+                filterCell.setBackgroundColor(COLOR_BG_HINT);
+            }
+            filterCell.setBorderColor(COLOR_BORDER_BLUE_DARK);
+            filterCell.setPadding(5);
+            tblFilter.addCell(filterCell);
+
+            if (statusInd) {
+                filterCell = new PdfPCell(new Phrase("Estado: ".concat(status), FontFactory.getFont(FONT_FAMILY, 11, Font.NORMAL, COLOR_TEXT)));
+            } else {
+                filterCell = new PdfPCell(new Phrase("Estado: ", FontFactory.getFont(FONT_FAMILY, 11, Font.NORMAL, COLOR_TEXT_HINT)));
+                filterCell.setBackgroundColor(COLOR_BG_HINT);
+            }
+            filterCell.setBorderColor(COLOR_BORDER_BLUE_DARK);
+            filterCell.setPadding(8);
+            tblFilter.addCell(filterCell);
+
+            // TABLA ASISTENCIA - CABECERA
+
+            PdfPTable tblMainHead = new PdfPTable(6);
+            tblMainHead.setWidthPercentage(100);
+            tblMainHead.setWidths(new int[]{4, 30, 13, 30, 11, 12});
+
+            Font tblHeadFont = FontFactory.getFont(FONT_FAMILY, 10, Font.BOLD, Color.WHITE);
+
+            PdfPCell headMainCell;
+
+            headMainCell = new PdfPCell(new Phrase(" ", tblHeadFont));
+            headMainCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headMainCell.setVerticalAlignment(Element.ALIGN_CENTER);
+            headMainCell.setBackgroundColor(COLOR_BG_RED);
+            headMainCell.setBorderColor(COLOR_BG_RED_DARK);
+            headMainCell.setPadding(8);
+
+            tblMainHead.addCell(headMainCell);
+
+            headMainCell = new PdfPCell(new Phrase("ESTUDIANTE", tblHeadFont));
+            headMainCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            headMainCell.setVerticalAlignment(Element.ALIGN_CENTER);
+            headMainCell.setBackgroundColor(COLOR_BG_RED);
+            headMainCell.setBorderColor(COLOR_BG_RED_DARK);
+            headMainCell.setPadding(8);
+            tblMainHead.addCell(headMainCell);
+
+            headMainCell = new PdfPCell(new Phrase("ESPECIALIDAD", tblHeadFont));
+            headMainCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headMainCell.setVerticalAlignment(Element.ALIGN_CENTER);
+            headMainCell.setBackgroundColor(COLOR_BG_RED);
+            headMainCell.setBorderColor(COLOR_BG_RED_DARK);
+            headMainCell.setPadding(8);
+            tblMainHead.addCell(headMainCell);
+
+            headMainCell = new PdfPCell(new Phrase("ESPECIALISTA", tblHeadFont));
+            headMainCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            headMainCell.setVerticalAlignment(Element.ALIGN_CENTER);
+            headMainCell.setBackgroundColor(COLOR_BG_RED);
+            headMainCell.setBorderColor(COLOR_BG_RED_DARK);
+            headMainCell.setPadding(8);
+            tblMainHead.addCell(headMainCell);
+
+            headMainCell = new PdfPCell(new Phrase("FECHA", tblHeadFont));
+            headMainCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headMainCell.setVerticalAlignment(Element.ALIGN_CENTER);
+            headMainCell.setBackgroundColor(COLOR_BG_RED);
+            headMainCell.setBorderColor(COLOR_BG_RED_DARK);
+            headMainCell.setPadding(8);
+            tblMainHead.addCell(headMainCell);
+
+            headMainCell = new PdfPCell(new Phrase("ESTADO", tblHeadFont));
+            headMainCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headMainCell.setVerticalAlignment(Element.ALIGN_CENTER);
+            headMainCell.setBackgroundColor(COLOR_BG_RED);
+            headMainCell.setBorderColor(COLOR_BG_RED_DARK);
+            headMainCell.setPadding(8);
+            tblMainHead.addCell(headMainCell);
+
+            // TABLA ASISTENCIA - CUERPO
+
+            int index = 0;
+            Font tblBodyFont = FontFactory.getFont(FONT_FAMILY, 11, Font.NORMAL, COLOR_TEXT);
 
             for (Asistencia asistencia : asisteniciaList) {
+                ++index;
 
-                PdfPCell cell;
+                PdfPCell headBodyCell;
 
-                cell = new PdfPCell(new Phrase(asistencia.getId().toString(), cellFont));
-                cell.setVerticalAlignment(Element.ALIGN_CENTER);
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
+                headBodyCell = new PdfPCell(new Phrase(String.valueOf(index), tblBodyFont));
+                headBodyCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                headBodyCell.setVerticalAlignment(Element.ALIGN_CENTER);
+                headBodyCell.setBorderColor(COLOR_BORDER_BLUE_DARK);
+                headBodyCell.setPadding(8);
+                tblMainHead.addCell(headBodyCell);
 
-                cell = new PdfPCell(new Phrase(asistencia.getEstudiante().getApellido() + ", " + asistencia.getEstudiante().getNombre(), cellFont));
-                cell.setVerticalAlignment(Element.ALIGN_CENTER);
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
+                String studentFullName = asistencia.getEstudiante().getApellido().toUpperCase().concat(", ").concat(asistencia.getEstudiante().getNombre().toUpperCase());
+                headBodyCell = new PdfPCell(new Phrase(studentFullName.toUpperCase(), tblBodyFont));
+                headBodyCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                headBodyCell.setVerticalAlignment(Element.ALIGN_CENTER);
+                headBodyCell.setBorderColor(COLOR_BORDER_BLUE_DARK);
+                headBodyCell.setPadding(8);
+                tblMainHead.addCell(headBodyCell);
 
-                cell = new PdfPCell(new Phrase(asistencia.getCita().getEspecialista().getEspecialidad().getDescripcion(), cellFont));
-                cell.setVerticalAlignment(Element.ALIGN_CENTER);
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
+                headBodyCell = new PdfPCell(new Phrase(asistencia.getCita().getEspecialista().getEspecialidad().getDescripcion().toUpperCase(), tblBodyFont));
+                headBodyCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                headBodyCell.setVerticalAlignment(Element.ALIGN_CENTER);
+                headBodyCell.setBorderColor(COLOR_BORDER_BLUE_DARK);
+                headBodyCell.setPadding(8);
+                tblMainHead.addCell(headBodyCell);
 
-                cell = new PdfPCell(new Phrase(asistencia.getCita().getEspecialista().getApellido() +", " +asistencia.getCita().getEspecialista().getNombre() , cellFont));
-                cell.setVerticalAlignment(Element.ALIGN_CENTER);
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
+                String specialistFullName = asistencia.getCita().getEspecialista().getApellido().concat(", ").concat(asistencia.getCita().getEspecialista().getNombre());
+                headBodyCell = new PdfPCell(new Phrase(specialistFullName.toUpperCase(), tblBodyFont));
+                headBodyCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                headBodyCell.setVerticalAlignment(Element.ALIGN_CENTER);
+                headBodyCell.setBorderColor(COLOR_BORDER_BLUE_DARK);
+                headBodyCell.setPadding(8);
+                tblMainHead.addCell(headBodyCell);
+
+                headBodyCell = new PdfPCell(new Phrase(String.valueOf(asistencia.getCita().getFecha()), tblBodyFont));
+                headBodyCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                headBodyCell.setVerticalAlignment(Element.ALIGN_CENTER);
+                headBodyCell.setBorderColor(COLOR_BORDER_BLUE_DARK);
+                headBodyCell.setPadding(8);
+                tblMainHead.addCell(headBodyCell);
+
+                headBodyCell = new PdfPCell(new Phrase(asistencia.getEstado(), tblBodyFont));
+                headBodyCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                headBodyCell.setVerticalAlignment(Element.ALIGN_CENTER);
+                switch (asistencia.getEstado()) {
+                    case "PENDIENTE":
+                        headBodyCell.setBackgroundColor( new Color(255, 228, 178));
+                        break;
+                    case "ASISTIDO":
+                        headBodyCell.setBackgroundColor( new Color(205, 253, 230));
+                        break;
+                    case "CANCELADO":
+                        headBodyCell.setBackgroundColor( new Color(234, 234, 234));
+                        break;
+                    default:
+                        headBodyCell.setBackgroundColor( new Color(255, 217, 217));
+                        break;
+                }
+                headBodyCell.setBorderColor(COLOR_BORDER_BLUE_DARK);
+                headBodyCell.setPadding(8);
+                tblMainHead.addCell(headBodyCell);
             }
+
 
             PdfWriter.getInstance(document, out);
             document.open();
 
-            document.addTitle("ASISTENCIA");
-
-            Path pathPhoto = Paths.get("src/main/resources/static").resolve("logoMake.png").toAbsolutePath();
-            Image photo = Image.getInstance(String.valueOf(pathPhoto));
-            photo.scaleToFit(60, 60);
-
-            Paragraph header = new Paragraph();
-            header.add(new Chunk(photo, 0, -60));
-            document.add(header);
-
-            Paragraph header1 = new Paragraph("Usuario: Giovanna Caceres",
-                    FontFactory.getFont(FONT_FAMILY, 8, DARK_COLOR));
-            header1.setAlignment(Element.ALIGN_RIGHT);
-            document.add(header1);
-
-
-            Paragraph header2 = new Paragraph("Fecha: " + date_now,
-                    FontFactory.getFont(FONT_FAMILY, 8, DARK_COLOR));
-            header2.setAlignment(Element.ALIGN_RIGHT);
-            document.add(header2);
-
-            document.add(Chunk.NEWLINE);
-            document.add(Chunk.NEWLINE);
-
-            Paragraph title = new Paragraph("Reportes Personalizados",
-                    FontFactory.getFont(FONT_FAMILY, 25, Font.BOLD, DARK_COLOR));
-            title.setAlignment(Element.ALIGN_CENTER);
-            document.add(title);
-
-            Paragraph subtitle = new Paragraph("Lista de Asistencia",
-                    FontFactory.getFont(FONT_FAMILY, 15, Font.UNDERLINE, DARK_COLOR));
-            subtitle.setAlignment(Element.ALIGN_CENTER);
-            document.add(subtitle);
-
-            document.add(table);
-
-            PdfPTable tableFooter = new PdfPTable(1);
-            tableFooter.setSpacingBefore(20);
-            tableFooter.setWidthPercentage(100);
-
-            Phrase footer = new Phrase("Texto con Borde",
-                    FontFactory.getFont(FONT_FAMILY, 15, DARK_COLOR));
-
-            PdfPCell cellFooter = new PdfPCell(footer);
-            cellFooter.setPadding(20);
-            cellFooter.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cellFooter.setVerticalAlignment(Element.ALIGN_CENTER);
-            tableFooter.addCell(cellFooter);
-
-            document.add(tableFooter);
+            document.addTitle("LISTA DE ASISTENCIA DE CITAS");
+            document.add(tblHeader);
+            document.add(titleFilter);
+            document.add(tblFilter);
+            document.add(tblMainHead);
 
             document.close();
+
         } catch (DocumentException | IOException ex) {
             logger.error("Error occurred: ", ex);
         }
         return out;
     }
+
 }
 

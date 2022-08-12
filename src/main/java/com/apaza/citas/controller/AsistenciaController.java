@@ -54,7 +54,7 @@ public class AsistenciaController {
 
 
 
-        return new ResponseEntity<>(service.filtroAsistenciaCustom(fecha,idEspecialista,estado), HttpStatus.OK);
+        return new ResponseEntity<>(service.filterAll(fecha,idEspecialista,estado), HttpStatus.OK);
     }
 
 

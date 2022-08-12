@@ -48,10 +48,14 @@ public class CitaService {
 
 
 
-    public Cita save(Cita  cita){
+    public Boolean save(Cita  cita){
 
-
-        return repository.save(cita);
+        Long conteo = repository.countAllByFecha(cita.getFecha());
+        if (conteo >= 5){
+            return false;
+        }
+        repository.save(cita);
+        return true;
     }
     public Cita update(Cita  cita){
 
