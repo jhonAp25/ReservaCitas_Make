@@ -62,7 +62,11 @@ public class CitaController {
 
     @PostMapping
     public ResponseEntity<?> agregar(@RequestBody Cita cita){
-        return new ResponseEntity<>(service.save(cita), HttpStatus.OK);
+        if (service.save(cita))
+            return new ResponseEntity<>("Agregado corectamente", HttpStatus.OK);
+        return new ResponseEntity<>("Ya existe Cupos para ese Dia...", HttpStatus.BAD_REQUEST);
+
+
     }
 
 
