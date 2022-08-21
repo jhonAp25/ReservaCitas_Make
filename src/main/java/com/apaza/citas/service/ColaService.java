@@ -1,10 +1,9 @@
 package com.apaza.citas.service;
 
 
-import com.apaza.citas.model.Cita;
+
 import com.apaza.citas.model.Cola;
 import com.apaza.citas.repository.ColaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,18 +11,22 @@ import java.util.List;
 @Service
 public class ColaService {
 
-    @Autowired
-    private ColaRepository repository;
+
+    private final ColaRepository repository;
+
+    public ColaService(ColaRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Cola> listAll(){
         return repository.findAll();
     }
 
-    public Cola findByIdEstudiante(Long id){
+    public Cola findByIdEstudiante(String id){
         return repository.findAllByEstudiante_Id(id);
     }
 
-    public Cola findById(Long id){
+    public Cola findById(String id){
         return repository.findById(id).orElse(null);
     }
 
@@ -39,12 +42,12 @@ public class ColaService {
         repository.save(cola);
         return true;
     }
-    public Boolean ColaExistenteEstudiante(Long id){
+    public Boolean ColaExistenteEstudiante(String id){
         return repository.existsAllByEstudiante_Id(id);
     }
 
 
-    public Cola updateEstado(Long idEstudiante , String estado){
+    public Cola updateEstado(String idEstudiante , String estado){
 
         Cola newCola = findByIdEstudiante(idEstudiante);
 

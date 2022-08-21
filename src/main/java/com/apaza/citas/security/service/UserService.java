@@ -75,7 +75,9 @@ public class UserService implements UserDetailsService {
     }
 
     public String newUser(UserDto userDto){
+
         Users users = new Users();
+
         Set<RoleUser> roles = new HashSet<>();
         RoleUser role = roleUserRepository.findByName(userDto.getRol());
         role.setId(role.getId());

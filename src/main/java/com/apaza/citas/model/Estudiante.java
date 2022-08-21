@@ -2,20 +2,21 @@ package com.apaza.citas.model;
 
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
+
 import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity
+@Document(collection = "estudiantes")
 public class Estudiante {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String foto;
     private String nombre;
@@ -27,7 +28,7 @@ public class Estudiante {
 
 
 
-    @ManyToOne
+
     private Carrera  carrera;
 
 

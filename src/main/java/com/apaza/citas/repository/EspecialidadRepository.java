@@ -1,8 +1,8 @@
 package com.apaza.citas.repository;
 
 import com.apaza.citas.model.Especialidad;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface EspecialidadRepository extends JpaRepository<Especialidad, Long> {
+public interface EspecialidadRepository extends MongoRepository<Especialidad, String> {
 
 }

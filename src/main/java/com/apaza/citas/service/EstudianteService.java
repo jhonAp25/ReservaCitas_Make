@@ -1,13 +1,10 @@
 package com.apaza.citas.service;
 
 
-import com.apaza.citas.model.Cita;
-import com.apaza.citas.model.Especialista;
 import com.apaza.citas.model.Estudiante;
 import com.apaza.citas.repository.EstudianteRepository;
 import com.apaza.citas.security.model.dto.UserDto;
 import com.apaza.citas.security.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +13,16 @@ import java.util.List;
 @Service
 public class EstudianteService {
 
-    @Autowired
-    private EstudianteRepository repository;
 
-    @Autowired
-    private UserService userService;
+    private final EstudianteRepository repository;
+
+
+    private final UserService userService;
+
+    public EstudianteService(EstudianteRepository repository, UserService userService) {
+        this.repository = repository;
+        this.userService = userService;
+    }
 
     public List<Estudiante> listAll(){
         return repository.findAll();
@@ -34,7 +36,7 @@ public class EstudianteService {
         return repository.findAllByDni(dni);
     }
 
-    public Estudiante findbyId(Long id){
+    public Estudiante findbyId(String id){
         return repository.findById(id).orElse(null);
     }
 

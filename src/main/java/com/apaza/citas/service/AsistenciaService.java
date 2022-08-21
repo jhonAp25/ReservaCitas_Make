@@ -2,11 +2,8 @@ package com.apaza.citas.service;
 
 
 import com.apaza.citas.model.Asistencia;
-import com.apaza.citas.model.Carrera;
 import com.apaza.citas.model.Especialidad;
-import com.apaza.citas.model.ReservaCita;
 import com.apaza.citas.repository.AsistenciaRepository;
-import com.apaza.citas.repository.CarreraRepository;
 import com.apaza.citas.util.ReportAsistencia;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,19 +17,23 @@ import java.util.stream.Collectors;
 @Service
 public class AsistenciaService {
 
-    @Autowired
-    private AsistenciaRepository repository;
 
-    @Autowired
-    private EspecialidadService especialidadService;
+    private final AsistenciaRepository repository;
 
+
+    private final EspecialidadService especialidadService;
+
+    public AsistenciaService(AsistenciaRepository repository, EspecialidadService especialidadService) {
+        this.repository = repository;
+        this.especialidadService = especialidadService;
+    }
 
 
     public List<Asistencia> listAll(){
         return repository.findAllByOrderByCitaAsc();
     }
 
-    public Asistencia findbyId(Long id){
+    public Asistencia findbyId(String id){
         return repository.findById(id).orElse(null);
     }
 
@@ -52,35 +53,35 @@ public class AsistenciaService {
         return repository.save(newAsistencia);
     }
 
-    public List<Asistencia> listAsistenciaEstudiante(Long id){
+    public List<Asistencia> listAsistenciaEstudiante(String id){
         return repository.findAllByEstudiante_Id(id);
     }
 
 
-    public Asistencia updateEstad(Long id, String estado){
+    public Asistencia updateEstad(String id, String estado){
             Asistencia newAsistencia = repository.findAllByCita_IdAndEstado(id , "PENDIENTE");
 
         newAsistencia.setEstado(estado);
         return repository.save(newAsistencia);
     }
 
-    public ByteArrayOutputStream getListAsitenciaPdf(LocalDate fecha, Long idEspecialidad , String estado ) {
+    public ByteArrayOutputStream getListAsitenciaPdf(LocalDate fecha, String idEspecialidad , String estado ) {
         List<Asistencia> asistenciaList =  filterAll(fecha,idEspecialidad,estado);
         Especialidad especialidad = new Especialidad();
         ReportAsistencia asistenciaPdf = new ReportAsistencia();
-        if (idEspecialidad != null){
+        if (idEspecialidad.isEmpty()){
             especialidad = especialidadService.findbyId(idEspecialidad);
         }
 
         return asistenciaPdf.generateList(asistenciaList , fecha, especialidad, estado );
     }
 
-    public List<Asistencia> listAsistenciaXespecialista(Long id ){
+    public List<Asistencia> listAsistenciaXespecialista(String id ){
         LocalDate ahora = LocalDate.now();
         return repository.findAllByCita_Especialista_IdAndCita_Fecha(id, ahora);
     }
 
-    public List<Asistencia> filterAll(LocalDate date, Long idEspecialidad , String status ){
+    public List<Asistencia> filterAll(LocalDate date, String idEspecialidad , String status ){
         return repository.findAll().stream().filter(asistencia -> {
             if (idEspecialidad != null) {
                 return Objects.equals(asistencia.getCita().getEspecialista().getEspecialidad().getId(), idEspecialidad);

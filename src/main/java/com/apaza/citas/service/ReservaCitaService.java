@@ -3,7 +3,6 @@ package com.apaza.citas.service;
 
 import com.apaza.citas.model.*;
 import com.apaza.citas.repository.ReservaCitaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,30 +10,35 @@ import java.util.List;
 @Service
 public class ReservaCitaService {
 
-    @Autowired
-    private ReservaCitaRepository repository;
 
-    @Autowired
-    private CitaService citaService;
-
-    @Autowired
-    private ColaService colaService;
+    private final ReservaCitaRepository repository;
 
 
+    private final CitaService citaService;
 
 
-    @Autowired
-    private AsistenciaService asistenciaService;
+    private final ColaService colaService;
+
+
+
+    private final AsistenciaService asistenciaService;
+
+    public ReservaCitaService(ReservaCitaRepository repository, CitaService citaService, ColaService colaService, AsistenciaService asistenciaService) {
+        this.repository = repository;
+        this.citaService = citaService;
+        this.colaService = colaService;
+        this.asistenciaService = asistenciaService;
+    }
 
     public List<ReservaCita> listAll(){
         return repository.findAll();
     }
 
-    public ReservaCita findbyId(Long id){
+    public ReservaCita findbyId(String id){
         return repository.findById(id).orElse(null);
     }
 
-    public ReservaCita findReservaCita(Long id){
+    public ReservaCita findReservaCita(String id){
         return repository.findAllByCita_Id(id);
     }
 
@@ -68,11 +72,11 @@ public class ReservaCitaService {
         return repository.save(newCita);
     }
 
-    public List<ReservaCita> listReservaEstudiante(Long id){
+    public List<ReservaCita> listReservaEstudiante(String id){
         return repository.findAllByEstudiante_Id(id);
     }
 
-    public String  cancelarReserva(Long  idCit){
+    public String  cancelarReserva(String  idCit){
 
         ReservaCita newReservaCita =  findReservaCita(idCit);
         repository.delete(newReservaCita);

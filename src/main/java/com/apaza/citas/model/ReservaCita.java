@@ -2,22 +2,22 @@ package com.apaza.citas.model;
 
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 
-@Entity
+@Document(collection = "reserva_citas")
 @Data
 public class ReservaCita {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String descripcion;
 
-    @ManyToOne
+
     private Estudiante estudiante;
 
-    @ManyToOne
+
     private Cita cita;
 
 

@@ -2,11 +2,9 @@ package com.apaza.citas.service;
 
 
 import com.apaza.citas.model.Especialista;
-import com.apaza.citas.model.Estudiante;
 import com.apaza.citas.repository.EspecialistaRepository;
 import com.apaza.citas.security.model.dto.UserDto;
 import com.apaza.citas.security.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,17 +13,22 @@ import java.util.List;
 public class EspecialistaService {
 
 
-    @Autowired
-    private EspecialistaRepository repository;
 
-    @Autowired
-    private UserService userService;
+    private final EspecialistaRepository repository;
+
+
+    private final UserService userService;
+
+    public EspecialistaService(EspecialistaRepository repository, UserService userService) {
+        this.repository = repository;
+        this.userService = userService;
+    }
 
     public List<Especialista> listAll(){
         return repository.findAll();
     }
 
-    public Especialista findbyId(Long id){
+    public Especialista findbyId(String id){
         return repository.findById(id).orElse(null);
     }
 

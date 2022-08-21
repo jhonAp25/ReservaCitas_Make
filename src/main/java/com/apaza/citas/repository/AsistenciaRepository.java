@@ -1,18 +1,19 @@
 package com.apaza.citas.repository;
 
 import com.apaza.citas.model.Asistencia;
-import org.apache.tomcat.jni.Local;
-import org.springframework.data.jpa.repository.JpaRepository;
+
+
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public interface AsistenciaRepository extends JpaRepository<Asistencia , Long> {
+public interface AsistenciaRepository extends MongoRepository<Asistencia , String> {
 
-    List<Asistencia> findAllByEstudiante_Id(Long id);
+    List<Asistencia> findAllByEstudiante_Id(String id);
     List<Asistencia> findAllByOrderByCitaAsc();
-    Asistencia findAllByCita_IdAndEstado(Long id, String estado);
-    List<Asistencia> findAllByCita_Especialista_IdAndCita_Fecha(Long id, LocalDate fecha);
+    Asistencia findAllByCita_IdAndEstado(String id, String estado);
+    List<Asistencia> findAllByCita_Especialista_IdAndCita_Fecha(String id, LocalDate fecha);
 
 //    List<Asistencia> findAllByCita_FechaOrCita_Especialista_IdOrEstado(LocalDate fecha, Long idEspecialista , String estado);
 //    List<Asistencia> findAllByCita_FechaAndCita_Especialista_IdAndEstado (LocalDate fecha, Long idEspecialista, String estado );

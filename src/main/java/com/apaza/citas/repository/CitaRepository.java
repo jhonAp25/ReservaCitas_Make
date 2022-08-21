@@ -2,17 +2,18 @@ package com.apaza.citas.repository;
 
 import com.apaza.citas.model.Cita;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public interface CitaRepository extends JpaRepository<Cita, Long> {
+public interface CitaRepository extends MongoRepository<Cita, String> {
 
-    List<Cita> findCitaByFechaAndEspecialista_Especialidad_Id(LocalDate fecha, Long id);
-    List<Cita> findAllByEstadoAndEspecialista_Especialidad_IdOrderByFecha( Boolean estado,Long id);
-    List<Cita> findCitaByFechaAndEspecialista_Especialidad_IdAndEstado(LocalDate fecha, Long id, Boolean estado);
-    List<Cita> findCitaByEspecialista_IdAndFechaAfter( Long id,LocalDate fecha);
+    List<Cita> findCitaByFechaAndEspecialista_Especialidad_Id(LocalDate fecha, String id);
+    List<Cita> findAllByEstadoAndEspecialista_Especialidad_IdOrderByFecha( Boolean estado,String id);
+    List<Cita> findCitaByFechaAndEspecialista_Especialidad_IdAndEstado(LocalDate fecha, String id, Boolean estado);
+    List<Cita> findCitaByEspecialista_IdAndFechaAfter( String id,LocalDate fecha);
     Long countAllByFecha(LocalDate date);
 
 

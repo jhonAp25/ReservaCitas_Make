@@ -1,24 +1,27 @@
 package com.apaza.citas.model;
 
 
+import dev.morphia.annotations.PrePersist;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 
-@Entity
+
+@Document(collection = "asistencias")
 @Data
 public class Asistencia {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String estado;
 
-    @ManyToOne
+
     private Estudiante estudiante;
 
-    @ManyToOne
+
     private Cita cita;
 
     @PrePersist

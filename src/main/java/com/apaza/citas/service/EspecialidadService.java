@@ -2,11 +2,9 @@ package com.apaza.citas.service;
 
 
 import com.apaza.citas.model.Especialidad;
-import com.apaza.citas.model.Especialista;
+
 import com.apaza.citas.repository.EspecialidadRepository;
-import com.apaza.citas.repository.EspecialistaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,14 +13,18 @@ import java.util.List;
 @Service
 public class EspecialidadService {
 
-    @Autowired
-    private EspecialidadRepository repository;
+
+    private final EspecialidadRepository repository;
+
+    public EspecialidadService(EspecialidadRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Especialidad> listAll(){
         return repository.findAll();
     }
 
-    public Especialidad findbyId(Long id){
+    public Especialidad findbyId(String id){
 
        return repository.findById(id).orElse(null);
     }

@@ -1,14 +1,17 @@
 package com.apaza.citas.model;
 
 
+import dev.morphia.annotations.PrePersist;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 
-@Entity
+@Document(collection = "citas")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,8 +19,7 @@ import java.time.LocalTime;
 public class Cita {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private LocalDate fecha;
     private LocalTime horaInicio;
     private boolean estado;
@@ -27,7 +29,7 @@ public class Cita {
         estado = true;
     }
 
-    @ManyToOne
+
     private Especialista especialista;
 
 }

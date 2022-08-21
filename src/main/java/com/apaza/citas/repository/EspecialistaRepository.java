@@ -1,9 +1,9 @@
 package com.apaza.citas.repository;
 
 import com.apaza.citas.model.Especialista;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface EspecialistaRepository extends JpaRepository<Especialista, Long>{
+public interface EspecialistaRepository extends MongoRepository<Especialista, String> {
 
     Especialista findAllByDni(String dni);
 }

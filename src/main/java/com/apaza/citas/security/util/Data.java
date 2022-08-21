@@ -4,7 +4,6 @@ import com.apaza.citas.security.model.RoleUser;
 import com.apaza.citas.security.model.Users;
 import com.apaza.citas.security.service.RoleUserService;
 import com.apaza.citas.security.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -14,11 +13,16 @@ import java.util.Set;
 @Component
 public class Data {
 
-    @Autowired
-    private RoleUserService roleService;
+
+    private final RoleUserService roleService;
 //
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
+
+    public Data(RoleUserService roleService, UserService userService) {
+        this.roleService = roleService;
+        this.userService = userService;
+    }
 
     @PostConstruct
     public void init(){

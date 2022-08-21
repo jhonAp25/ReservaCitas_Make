@@ -1,25 +1,27 @@
 package com.apaza.citas.model;
 
 
+import dev.morphia.annotations.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+
 
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
-@Entity
+@Document(collection = "colas")
 public class Cola {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String estado;
 
     @PrePersist
@@ -27,6 +29,6 @@ public class Cola {
         estado = "ESPERA";
     }
 
-    @ManyToOne
+
     private Estudiante estudiante;
 }
