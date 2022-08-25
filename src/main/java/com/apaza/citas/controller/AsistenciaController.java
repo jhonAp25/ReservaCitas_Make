@@ -1,8 +1,8 @@
 package com.apaza.citas.controller;
 
 
-import com.apaza.citas.model.Asistencia;
-import com.apaza.citas.service.AsistenciaService;
+import com.apaza.citas.model.Attendance;
+import com.apaza.citas.service.A;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,41 +21,41 @@ import java.util.List;
 public class AsistenciaController {
 
 
-    private final AsistenciaService service;
+    private final A service;
 
     @Autowired
-    public AsistenciaController(AsistenciaService service) {
+    public AsistenciaController(A service) {
         this.service = service;
     }
 
 
     @GetMapping
-    public ResponseEntity<List<Asistencia>> listado(){
+    public ResponseEntity<List<Attendance>> listado(){
         return new ResponseEntity<>(service.listAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Asistencia> busqueda(String id){
+    public ResponseEntity<Attendance> busqueda(String id){
         return new ResponseEntity<>(service.findbyId(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Asistencia> agregar(@RequestBody Asistencia asistencia){
+    public ResponseEntity<Attendance> agregar(@RequestBody Attendance asistencia){
         return new ResponseEntity<>(service.save(asistencia), HttpStatus.OK);
     }
 
     @GetMapping("/fitro-estudiante/{id}")
-    public ResponseEntity<List<Asistencia>> busquedaReservaEstudiante(@PathVariable String id){
+    public ResponseEntity<List<Attendance>> busquedaReservaEstudiante(@PathVariable String id){
         return new ResponseEntity<>(service.listAsistenciaEstudiante(id), HttpStatus.OK);
     }
 
     @GetMapping("/fitro-x-especialista/{id}")
-    public ResponseEntity<List<Asistencia>> busquedaXEspecialista(@PathVariable String id){
+    public ResponseEntity<List<Attendance>> busquedaXEspecialista(@PathVariable String id){
         return new ResponseEntity<>(service.listAsistenciaXespecialista(id), HttpStatus.OK);
     }
 
     @GetMapping("/fitro-x-custom")
-    public ResponseEntity<List<Asistencia>> busquedaXCustom(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha , @RequestParam(required = false)  String idEspecialista , @RequestParam(required = false)  String estado ){
+    public ResponseEntity<List<Attendance>> busquedaXCustom(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha , @RequestParam(required = false)  String idEspecialista , @RequestParam(required = false)  String estado ){
 
 
 
@@ -64,12 +64,12 @@ public class AsistenciaController {
 
 
     @PutMapping
-    public ResponseEntity<Asistencia> actualizar(@RequestBody Asistencia asistencia){
+    public ResponseEntity<Attendance> actualizar(@RequestBody Attendance asistencia){
         return new ResponseEntity<>(service.updateAsitencia(asistencia ), HttpStatus.OK);
     }
 
     @PutMapping("/update-estado/{estado}/{idCita}")
-    public ResponseEntity<Asistencia> actualizarEstado(@PathVariable String estado , @PathVariable String idCita){
+    public ResponseEntity<Attendance> actualizarEstado(@PathVariable String estado , @PathVariable String idCita){
         return new ResponseEntity<>(service.updateEstad(idCita, estado ), HttpStatus.OK);
     }
 

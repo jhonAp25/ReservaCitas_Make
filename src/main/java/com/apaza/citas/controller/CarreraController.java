@@ -1,7 +1,7 @@
 package com.apaza.citas.controller;
 
 
-import com.apaza.citas.model.Carrera;
+import com.apaza.citas.model.Career;
 import com.apaza.citas.service.CarreraService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,24 +24,24 @@ public class CarreraController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Carrera>> listado(){
+    public ResponseEntity<List<Career>> listado(){
         return new ResponseEntity<>(service.listAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Carrera> busqueda(@PathVariable("id") String id){
+    public ResponseEntity<Career> busqueda(@PathVariable("id") String id){
         return new ResponseEntity<>(service.findbyId(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Carrera> agregar(@RequestBody Carrera carrera){
-        return new ResponseEntity<>(service.save(carrera), HttpStatus.OK);
+    public ResponseEntity<Career> agregar(@RequestBody Career career){
+        return new ResponseEntity<>(service.save(career), HttpStatus.OK);
     }
 
 
 
     @PutMapping
-    public ResponseEntity<Carrera> actualizar(@RequestBody Carrera carrera){
+    public ResponseEntity<Career> actualizar(@RequestBody Career carrera){
         return new ResponseEntity<>(service.update(carrera ), HttpStatus.OK);
     }
 }

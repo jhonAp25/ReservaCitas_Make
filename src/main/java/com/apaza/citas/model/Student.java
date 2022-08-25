@@ -12,24 +12,24 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @Setter
-@Document(collection = "estudiantes")
-public class Estudiante {
+@Document(collection = "students")
+public class Student {
 
     @Id
     private String id;
 
-    private String foto;
-    private String nombre;
-    private String apellido;
-    private LocalDate fecnac;
-    private String telefono;
-    private String correo;
+    private String photo;
+    private String name;
+    private String secondName;
+    private LocalDate dataBirth;
+    private String phone;
+    private String email;
     private String dni;
 
 
 
 
-    private Carrera  carrera;
+    private Career  career;
 
 
 

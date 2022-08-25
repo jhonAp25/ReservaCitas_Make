@@ -1,7 +1,7 @@
 package com.apaza.citas.controller;
 
 
-import com.apaza.citas.model.Cita;
+import com.apaza.citas.model.Meeting;
 import com.apaza.citas.service.CitaService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,18 +29,18 @@ public class CitaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Cita>> listado(){
+    public ResponseEntity<List<Meeting>> listado(){
         return new ResponseEntity<>(service.listAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cita> busqueda(String id){
+    public ResponseEntity<Meeting> busqueda(String id){
         return new ResponseEntity<>(service.findbyId(id), HttpStatus.OK);
     }
 
 
     @GetMapping("/{fecha}/{id}")
-    public ResponseEntity<List<Cita>> filtroFechaEspecialidad(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate  fecha, @PathVariable String id){
+    public ResponseEntity<List<Meeting>> filtroFechaEspecialidad(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate  fecha, @PathVariable String id){
 
     //    if (service.findFechaEspecialidad(fecha,id).isEmpty())
     //      return new ResponseEntity<>("No Hay Citas Disponibles", HttpStatus.NO_CONTENT);
@@ -50,25 +50,25 @@ public class CitaController {
     }
 
     @GetMapping("/top/{idEspcd}")
-    public ResponseEntity<List<Cita>> topCita(@PathVariable String idEspcd){
+    public ResponseEntity<List<Meeting>> topCita(@PathVariable String idEspcd){
 
         return new ResponseEntity<>(service.listaTop(idEspcd), HttpStatus.OK);
     }
 
     @GetMapping("/cita-disponible/{fecha}/{id}")
-    public ResponseEntity<List<Cita>> filtroFechaEspecialidadDisponibles(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate  fecha, @PathVariable String id){
+    public ResponseEntity<List<Meeting>> filtroFechaEspecialidadDisponibles(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate  fecha, @PathVariable String id){
 
         return new ResponseEntity<>(service.findFechaEspecialidadDisponible(fecha, id), HttpStatus.OK);
     }
 
     @GetMapping("/cita-especialista-fecha/{id}/{fecha}")
-    public ResponseEntity<List<Cita>> filtroFechaEspecialista( @PathVariable String id, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate  fecha){
+    public ResponseEntity<List<Meeting>> filtroFechaEspecialista(@PathVariable String id, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate  fecha){
 
         return new ResponseEntity<>(service.findFechaEspecialista( id, fecha), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<String> agregar(@RequestBody Cita cita){
+    public ResponseEntity<String> agregar(@RequestBody Meeting cita){
         if (TRUE.equals(service.save(cita)))
             return new ResponseEntity<>("Agregado corectamente", HttpStatus.OK);
         return new ResponseEntity<>("Ya existe Cupos para ese Dia...", HttpStatus.BAD_REQUEST);
@@ -79,7 +79,7 @@ public class CitaController {
 
 
     @PutMapping
-    public ResponseEntity<Cita> actualizar(@RequestBody Cita cita){
+    public ResponseEntity<Meeting> actualizar(@RequestBody Meeting cita){
         return new ResponseEntity<>(service.update(cita ), HttpStatus.OK);
     }
 }

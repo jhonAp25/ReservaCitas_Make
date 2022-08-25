@@ -1,8 +1,8 @@
 package com.apaza.citas.util;
 
 
-import com.apaza.citas.model.Asistencia;
-import com.apaza.citas.model.Especialidad;
+import com.apaza.citas.model.Attendance;
+import com.apaza.citas.model.Specialty;
 import com.lowagie.text.Font;
 import com.lowagie.text.Image;
 import com.lowagie.text.*;
@@ -42,13 +42,13 @@ public class ReportAsistencia {
     String currentDate = dateFormat.format(new Date());
     Path pathStatic = Paths.get("src/main/resources/static");
 
-    public ByteArrayOutputStream generateList(List<Asistencia> asisteniciaList, LocalDate date, Especialidad specialty, String status) {
+    public ByteArrayOutputStream generateList(List<Attendance> asisteniciaList, LocalDate date, Specialty specialty, String status) {
 
         Document document = new Document(PageSize.A4.rotate(), 40, 40, 40, 40);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         boolean dateInd = date != null;
-        boolean specialtyInd = specialty.getDescripcion() != null;
+        boolean specialtyInd = specialty.getDescription() != null;
         boolean statusInd = status != null;
 
         try {
@@ -112,7 +112,7 @@ public class ReportAsistencia {
             tblFilter.addCell(filterCell);
 
             if (specialtyInd) {
-                filterCell = new PdfPCell(new Phrase("Especialidad: ".concat(specialty.getDescripcion()), FontFactory.getFont(FONT_FAMILY, 11, Font.NORMAL, COLOR_TEXT)));
+                filterCell = new PdfPCell(new Phrase("Especialidad: ".concat(specialty.getDescription()), FontFactory.getFont(FONT_FAMILY, 11, Font.NORMAL, COLOR_TEXT)));
             } else {
                 filterCell = new PdfPCell(new Phrase("Especialidad: ", FontFactory.getFont(FONT_FAMILY, 11, Font.NORMAL, COLOR_TEXT_HINT)));
                 filterCell.setBackgroundColor(COLOR_BG_HINT);
@@ -195,7 +195,7 @@ public class ReportAsistencia {
             int index = 0;
             Font tblBodyFont = FontFactory.getFont(FONT_FAMILY, 11, Font.NORMAL, COLOR_TEXT);
 
-            for (Asistencia asistencia : asisteniciaList) {
+            for (Attendance attendance : asisteniciaList) {
                 ++index;
 
                 PdfPCell headBodyCell;
@@ -207,7 +207,7 @@ public class ReportAsistencia {
                 headBodyCell.setPadding(8);
                 tblMainHead.addCell(headBodyCell);
 
-                String studentFullName = asistencia.getEstudiante().getApellido().toUpperCase().concat(", ").concat(asistencia.getEstudiante().getNombre().toUpperCase());
+                String studentFullName = attendance.getStudent().getSecondName().toUpperCase().concat(", ").concat(attendance.getStudent().getName().toUpperCase());
                 headBodyCell = new PdfPCell(new Phrase(studentFullName.toUpperCase(), tblBodyFont));
                 headBodyCell.setHorizontalAlignment(Element.ALIGN_LEFT);
                 headBodyCell.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -215,14 +215,14 @@ public class ReportAsistencia {
                 headBodyCell.setPadding(8);
                 tblMainHead.addCell(headBodyCell);
 
-                headBodyCell = new PdfPCell(new Phrase(asistencia.getCita().getEspecialista().getEspecialidad().getDescripcion().toUpperCase(), tblBodyFont));
+                headBodyCell = new PdfPCell(new Phrase(attendance.getMeeting().getSpecialist().getSpecialty().getDescription().toUpperCase(), tblBodyFont));
                 headBodyCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 headBodyCell.setVerticalAlignment(Element.ALIGN_CENTER);
                 headBodyCell.setBorderColor(COLOR_BORDER_BLUE_DARK);
                 headBodyCell.setPadding(8);
                 tblMainHead.addCell(headBodyCell);
 
-                String specialistFullName = asistencia.getCita().getEspecialista().getApellido().concat(", ").concat(asistencia.getCita().getEspecialista().getNombre());
+                String specialistFullName = attendance.getMeeting().getSpecialist().getSecondName().concat(", ").concat(attendance.getMeeting().getSpecialist().getName());
                 headBodyCell = new PdfPCell(new Phrase(specialistFullName.toUpperCase(), tblBodyFont));
                 headBodyCell.setHorizontalAlignment(Element.ALIGN_LEFT);
                 headBodyCell.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -230,17 +230,17 @@ public class ReportAsistencia {
                 headBodyCell.setPadding(8);
                 tblMainHead.addCell(headBodyCell);
 
-                headBodyCell = new PdfPCell(new Phrase(String.valueOf(asistencia.getCita().getFecha()), tblBodyFont));
+                headBodyCell = new PdfPCell(new Phrase(String.valueOf(attendance.getMeeting().getDate()), tblBodyFont));
                 headBodyCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 headBodyCell.setVerticalAlignment(Element.ALIGN_CENTER);
                 headBodyCell.setBorderColor(COLOR_BORDER_BLUE_DARK);
                 headBodyCell.setPadding(8);
                 tblMainHead.addCell(headBodyCell);
 
-                headBodyCell = new PdfPCell(new Phrase(asistencia.getEstado(), tblBodyFont));
+                headBodyCell = new PdfPCell(new Phrase(attendance.getState(), tblBodyFont));
                 headBodyCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 headBodyCell.setVerticalAlignment(Element.ALIGN_CENTER);
-                switch (asistencia.getEstado()) {
+                switch (attendance.getState()) {
                     case "PENDIENTE":
                         headBodyCell.setBackgroundColor( new Color(255, 228, 178));
                         break;

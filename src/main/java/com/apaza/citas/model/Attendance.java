@@ -3,30 +3,28 @@ package com.apaza.citas.model;
 
 import dev.morphia.annotations.PrePersist;
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
-
-@Document(collection = "asistencias")
+@Document(collection = "attendances")
 @Data
-public class Asistencia {
+public class Attendance {
 
     @Id
     private String id;
 
-    private String estado;
+    private String state;
 
 
-    private Estudiante estudiante;
+    private Student student;
 
 
-    private Cita cita;
+    private Meeting meeting;
 
     @PrePersist
     void preInsert() {
-        estado = "PENDIENTE";
+        state = "EARRING";
     }
 
 }

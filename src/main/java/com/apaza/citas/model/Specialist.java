@@ -8,20 +8,20 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 
-@Document(collection = "especialistas")
+@Document(collection = "specialists")
 @Data
-public class Especialista {
+public class Specialist {
 
     @Id
     private String id;
-    private String nombre;
-    private String apellido;
-    private String telefono;
-    private String correo;
-    private LocalDate fecnac;
+    private String name;
+    private String secondName;
+    private String phone;
+    private String email;
+    private LocalDate dateBirth;
     private String dni;
 
 
-    private Especialidad especialidad;
+    private Specialty specialty;
 
 }

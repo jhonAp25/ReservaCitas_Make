@@ -6,12 +6,20 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
-@Document(collection = "especialidades")
+@Document(collection = "book_appointment")
 @Data
-public class Especialidad {
+public class BookAppointment {
 
     @Id
     private String id;
+    private String description;
 
-    private String descripcion;
+
+    private Student student;
+
+
+    private Meeting meeting;
+
+
+
 }

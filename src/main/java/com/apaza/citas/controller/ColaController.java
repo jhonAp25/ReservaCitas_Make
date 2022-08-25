@@ -1,7 +1,7 @@
 package com.apaza.citas.controller;
 
 
-import com.apaza.citas.model.Cola;
+import com.apaza.citas.model.Queue;
 import com.apaza.citas.service.ColaService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,18 +26,18 @@ public class ColaController {
 
 
     @GetMapping
-    public ResponseEntity<List<Cola>> lista(){
+    public ResponseEntity<List<Queue>> lista(){
         return new ResponseEntity<>(service.listAll(), HttpStatus.OK);
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cola> busqueda(String id){
+    public ResponseEntity<Queue> busqueda(String id){
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
     @GetMapping("/espera")
-    public ResponseEntity<List<Cola>> colaEspera(){
+    public ResponseEntity<List<Queue>> colaEspera(){
         return new ResponseEntity<>(service.findColaEspera(), HttpStatus.OK);
     }
 
@@ -45,7 +45,7 @@ public class ColaController {
 
 
     @PostMapping
-    public ResponseEntity<Boolean> agregar(@RequestBody Cola cola){
+    public ResponseEntity<Boolean> agregar(@RequestBody Queue cola){
         if (!service.save(cola))
             return new ResponseEntity<>(service.save(cola), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(service.save(cola), HttpStatus.OK);
@@ -54,7 +54,7 @@ public class ColaController {
 
 
     @PutMapping
-    public ResponseEntity<Cola> actualizarEstado(@PathVariable String idEstudiante ,@PathVariable String estado ){
+    public ResponseEntity<Queue> actualizarEstado(@PathVariable String idEstudiante , @PathVariable String estado ){
         return new ResponseEntity<>(service.updateEstado(idEstudiante, estado ), HttpStatus.OK);
     }
 
